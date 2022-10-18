@@ -9,6 +9,12 @@ interface IProduct {
   store: string;
 };
 
+// auth login interface
+interface iLoginData{
+  email:string,
+  password:string
+};
+
 // auth interface
 interface IUserData {
   name: string;
@@ -17,4 +23,4 @@ interface IUserData {
   role: string;
   status: string;
   token: string;
-}
+};
