@@ -1,20 +1,21 @@
 import React, { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
-const Home = React.lazy(() => import('./pages/home/Home'));
-const Login = React.lazy(() => import('./pages/Login/Login'));
-const Signup = React.lazy(() => import('./pages/signup/Signup'));
-const SingleProduct= React.lazy(() => import('./pages/singleProduct/SingleProduct'));
+import routes from '../routes/routes';
 
 const Main = () => {
   return (
-    <Suspense fallback={<>Loading...</>}>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/product/:_id" element={<SingleProduct />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </Suspense>
+    <>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+        {
+          routes.map((route,idx)=>{
+            return (route.element&& (<Route element={<route.element/>} path={route.path} key={idx}></Route>))
+          
+          })
+        }
+        </Routes>
+      </Suspense>
+    </>
   );
 };
 

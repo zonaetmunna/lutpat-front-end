@@ -2,6 +2,7 @@ import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { AppThunk, RootState } from '../../../reudx-toolkit/store';
 
 // interface
 interface IFormInput {
@@ -9,24 +10,28 @@ interface IFormInput {
   email: String;
   password: String;
   phone: Number;
-}
+};
 
 const Signup = () => {
-
+  // useform hooks
   const { register, handleSubmit } = useForm<IFormInput>();
-
+  // redux toolkit dispatch hooks
   const dispatch = useDispatch();
+  const {data,error,status} = useSelector((state:AppThunk) => state);
+  // router navigate hook
   const navigate = useNavigate();
-  const {data,error,status} = useSelector((state:AppSate) => state.user);
+  
 
   const handleSignup: SubmitHandler<IFormInput> = (data: IFormInput) => {
     console.log(data);
     dispatch(data);
+
+    if (data) {
+      navigate('/');
+    }
   };
 
-  if (data) {
-    navigate('/');
-  }
+ 
   
   return (
     <div className="container mx-auto">

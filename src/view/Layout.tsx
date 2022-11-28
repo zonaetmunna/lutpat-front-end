@@ -5,7 +5,7 @@ import Main from './Main';
 
 const Layout = () => {
   return (
-    <div>
+    <>
       <div>
         <Header />
       </div>
@@ -13,7 +13,7 @@ const Layout = () => {
         <Main /> 
       </div>
       <Footer/>
-    </div>
+    </>
   );
 };
 
