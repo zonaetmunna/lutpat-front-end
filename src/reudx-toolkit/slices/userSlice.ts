@@ -1,4 +1,4 @@
-import { Action, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {  AsyncThunk, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import useAPI from "../../hooks/useApi";
 import authService from "../../services/auth.service";
 
@@ -16,21 +16,21 @@ const initialState: userState = {
 };
 
 // signup asyncthunk
-const signupUser = createAsyncThunk(
+const signupUser:AsyncThunk = createAsyncThunk(
     'user/signupUser',
     async (payload: {name:string,email:string,password:string,phone:number}) => {
-      const data = await useAPI<IUserData>(() => authService.signup(payload)); 
+      const data = await useAPI<IUserData>(()=>authService.signup(payload)); 
       return data;
     },
 );
 
 // login asyncthunk
 const loginUser = createAsyncThunk(
-    'user/loginUser',
-    async (payload: { email: string; password: string }) => {
-      const data = await useAPI<IUserData>(() => authService.login(payload)); 
-      return data;
-    },
+  'user/loginUser',
+  async (payload: { email: string; password: string }) => {
+    const data = await useAPI<IUserData>(() => authService.login(payload)); 
+    return data;
+  },
 );
 
 export const userSlice = createSlice({
@@ -39,27 +39,14 @@ export const userSlice = createSlice({
   reducers: {
     
   },
-  extraReducers: (builder)=>{
-    builder.addCase(signupUser.pending, (state) => {
+  extraReducers: {
+    [signupUser.pending]: (state) => {
       state.data = null;
       state.error = null;
       state.status = "pending";
-    });
-    builder.addCase(signupUser.fulfilled, (state, action) => {
-      state.data = action.payload.data;
-      state.error = null;
-      state.status = "success";
-    });
-  
-  }
-});
-
-
-export default userSlice;
-
- 
- /* [signupUser.fulfilled]: (state,action) => {
-      state.data = action.payload;
+    },
+    [signupUser.fulfilled]: (state, {payload}) => {
+      state.data = payload.data;
       state.error = null;
       state.status = "success";
     },
@@ -82,5 +69,13 @@ export default userSlice;
       state.data = null;
       state.error = action.error.message;
       state.status = "error";
-    },
- */
+    }
+  
+  }
+});
+
+
+export default userSlice;
+
+ 
+ 
