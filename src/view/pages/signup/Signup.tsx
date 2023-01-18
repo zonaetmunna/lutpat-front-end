@@ -17,15 +17,12 @@ const Signup = () => {
   const { register, handleSubmit } = useForm<IFormInput>();
   // redux toolkit dispatch hooks
   const dispatch = useDispatch();
-  const {data,error} = useSelector((state) => state);
   // router navigate hook
   const navigate = useNavigate();
   
 
   const handleSignup: SubmitHandler<IFormInput> = (data: IFormInput) => {
     console.log(data);
-    dispatch(data);
-
     if (data) {
       navigate('/');
     }

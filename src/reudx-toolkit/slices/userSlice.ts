@@ -16,62 +16,16 @@ const initialState: userState = {
 };
 
 // signup asyncthunk
-const signupUser:AsyncThunk = createAsyncThunk(
-    'user/signupUser',
-    async (payload: {name:string,email:string,password:string,phone:number}) => {
-      const data = await useAPI<IUserData>(()=>authService.signup(payload)); 
-      return data;
-    },
-);
+
 
 // login asyncthunk
-const loginUser = createAsyncThunk(
-  'user/loginUser',
-  async (payload: { email: string; password: string }) => {
-    const data = await useAPI<IUserData>(() => authService.login(payload)); 
-    return data;
-  },
-);
+
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
-  reducers: {
-    
-  },
-  extraReducers: {
-    [signupUser.pending]: (state) => {
-      state.data = null;
-      state.error = null;
-      state.status = "pending";
-    },
-    [signupUser.fulfilled]: (state, {payload}) => {
-      state.data = payload.data;
-      state.error = null;
-      state.status = "success";
-    },
-    [signupUser.rejected]: (state,action) => {
-      state.data = null;
-      state.error = action.error.message;
-      state.status = "error";
-    },
-    [loginUser.pending]: (state) => {
-      state.data = null;
-      state.error = null;
-      state.status = "pending";
-    },
-    [loginUser.fulfilled]: (state,action) => {
-      state.data = action.payload;
-      state.error = null;
-      state.status = "success";
-    },
-    [loginUser.rejected]: (state,action) => {
-      state.data = null;
-      state.error = action.error.message;
-      state.status = "error";
-    }
-  
-  }
+  reducers: {},
+  extraReducers: {}
 });
 
 
