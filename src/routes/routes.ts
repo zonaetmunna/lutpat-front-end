@@ -10,8 +10,8 @@ const Signup = React.lazy(() => import("../view/pages/signup/Signup"));
 const AdminDashboard = React.lazy(() => import("../view/pages/dashboard/AdminDashboard"));
 const marchentDashBoard = React.lazy(() => import("../view/pages/dashboard/
 MarchentDashboard")); */
-const Main = React.lazy(() => import('../view/layout/main/Main'));
-const Home = React.lazy(() => import('../view/pages/home/Home'));
+const Main = React.lazy(() => import('../view/layout/Main'));
+const Home = React.lazy(() => import('../view/pages/main/Home'));
 
 
 const getRoleBasedDashboard = (role: string) => {
