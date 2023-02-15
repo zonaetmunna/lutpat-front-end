@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import './App.css';
 import { store } from './reudx-toolkit/store';
+import { routes } from './routes/routes';
 
 
 function App() {
