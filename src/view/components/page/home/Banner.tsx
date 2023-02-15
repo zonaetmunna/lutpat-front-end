@@ -4,7 +4,9 @@ const Banner = () => {
   return (
     <div>
       <div className='text-orange-400'>
-        <h3>hi this is ecommerce</h3>
+        <h3>lutpat buy</h3>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores, quae!</p>
+        <button>more explore</button>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
-import  React, { FC }  from 'react';
-import { createBrowserRouter, RouteObject } from 'react-router-dom';
+import React from 'react';
+import { createBrowserRouter } from 'react-router-dom';
 
 import Error from '../view/layout/Error';
 import WishList from '../view/pages/main/WishList';
@@ -16,7 +16,6 @@ const Contact = React.lazy(() => import('../view/pages/main/Contact'));
 const PrivacyPolicy = React.lazy(() => import('../view/pages/main/PrivacyPolicy'));
 const TermCondition = React.lazy(() => import('../view/pages/main/TermsCondition'));
 const About = React.lazy(() => import('../view/pages/main/About'));
-
 
 
 export const routes = createBrowserRouter([
