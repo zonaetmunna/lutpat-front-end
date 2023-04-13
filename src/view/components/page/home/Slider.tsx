@@ -1,9 +1,10 @@
-import React from 'react';
+import React from "react";
+import Swiper from "swiper";
 
 const Slider = () => {
   return (
-    <div className='grid grid-cols-2 gap-1 flex items-center justify-around'>
-      <div className=''>
+    <div className="grid grid-cols-2 gap-1 flex items-center justify-around">
+      {/* <div className=''>
         
           <h4 className='font-bold text-lg'>Get 20% Off Discount</h4>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae, rerum.</p>
@@ -28,8 +29,8 @@ const Slider = () => {
           </SwiperSlide>
         
         </Swiper>
-      </div>
-      
+      </div> */}
+      <h1>slider</h1>
     </div>
   );
 };

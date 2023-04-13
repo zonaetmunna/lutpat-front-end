@@ -1,6 +1,6 @@
 import httpReq from "./http.service";
 
-class ProductService{
+class ProductService {
   // all products
   async getAllProducts(): Promise<IProduct[]> {
     const { data } = await httpReq.get("/product");

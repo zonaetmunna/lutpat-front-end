@@ -10,17 +10,32 @@ interface IProduct {
 };
 
 // auth login interface
-interface iLoginData{
-  email:string,
-  password:string
-};
-
-// auth interface
-interface IUserData {
+export interface IAuthData {
   name: string;
   email: string;
   id: string;
   role: string;
   status: string;
   token: string;
-};
+}
+
+// auth interface
+/* interface IUserData {
+  name: string;
+  email: string;
+  id: string;
+  role: string;
+  status: string;
+  token: string;
+}; */
+// types signup data
+interface SignUpData {
+  name: string;
+  email: string;
+  password: string;
+  phone: number
+}
+interface loginData {
+  email: string;
+  password: string;
+}
