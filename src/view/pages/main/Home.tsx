@@ -1,20 +1,21 @@
 import React from "react";
-import useAPI from "../../../hooks/useApi";
-import productService from "../../../services/product.service";
-import Products from "../../components/common/Products";
+import ProductCard from "../../components/common/ProductCard";
 import Banner from "../../components/page/home/Banner";
+import { useGetProductsQuery } from "../../../features/product/productApi";
 
 const Home = () => {
   // api data
-  const { data: products } = useAPI<IProduct[]>(productService.getAllProducts);
+  const { data, error, isError, isLoading } = useGetProductsQuery();
 
   return (
-    <div>
+    <div className="container mx-auto my-4">
       <Banner />
-      <div className="grid-cols-grid grid-cols-2 gap-4 text-gray-800 md:grid-cols-4 lg:grid-cols-5">
-        {products?.map((product) => (
-          <Products product={product} key={product._id} />
-        ))}
+      <h1 className="text-center text-3xl font-bold mb-4">Featured Products</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2">
+        {data &&
+          data?.data?.map((product) => (
+            <ProductCard product={product} key={product._id} />
+          ))}
       </div>
     </div>
   );

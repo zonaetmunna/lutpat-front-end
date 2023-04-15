@@ -1,9 +1,11 @@
 import React from "react";
 import { useGetProductsQuery } from "../../../../features/product/productApi";
+import { IProduct } from "../../../../types";
 
 const AllProduct = () => {
   const { data, isLoading, isError, error } = useGetProductsQuery();
   console.log(data);
+
   return (
     <div className="container mx-auto py-4">
       <h1 className="text-2xl font-bold mb-4">Product List</h1>
@@ -19,7 +21,7 @@ const AllProduct = () => {
         </thead>
         <tbody>
           {data &&
-            data?.map((product) => (
+            data?.data.map((product) => (
               <tr key={product._id}>
                 <td className="px-4 py-2 border">{product._id}</td>
                 <td className="px-4 py-2 border">{product.name}</td>

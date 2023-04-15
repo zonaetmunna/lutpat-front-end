@@ -31,6 +31,12 @@ const Sidebar = () => {
       path: "make-admin",
     },
   ];
+  const userRoutes = [
+    {
+      name: "account",
+      path: "User-account",
+    },
+  ];
 
   return (
     <div className="col-span-2 bg-yellow-400 h-[calc(100vh-25px)] p-5 rounded-lg shadow-md hover:bg-amber-200">
@@ -51,6 +57,17 @@ const Sidebar = () => {
           ))}
         {user?.role === "admin" &&
           adminRoutes.map(({ name, path }) => (
+            <li>
+              <Link
+                className="hover:bg-primary hover:text-white bg-primary/10 transition-all w-full block py-2 px-2 rounded-full"
+                to={path}
+              >
+                {name}
+              </Link>
+            </li>
+          ))}
+        {user?.role === "user" &&
+          userRoutes.map(({ name, path }) => (
             <li>
               <Link
                 className="hover:bg-primary hover:text-white bg-primary/10 transition-all w-full block py-2 px-2 rounded-full"

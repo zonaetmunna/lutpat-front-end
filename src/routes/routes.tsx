@@ -6,6 +6,9 @@ import Dashboard from "../view/layout/Dashboard";
 import AllProduct from "../view/pages/dashboard/adminDashboard/AllProduct";
 import MakeAdmin from "../view/pages/dashboard/adminDashboard/MakeAdmin";
 import AddProduct from "../view/pages/dashboard/adminDashboard/AddProduct";
+import AdminDashboard from "../view/pages/dashboard/adminDashboard/AdminDashboard";
+import UserDashboard from "../view/pages/dashboard/userDashboard/UserDashboard";
+import MarchentDashboard from "../view/pages/dashboard/marchentDashboard/MarchentDashboard";
 const Main = React.lazy(() => import("../view/layout/Main"));
 const Home = React.lazy(() => import("../view/pages/main/Home"));
 const SingleProduct = React.lazy(
@@ -90,6 +93,18 @@ export const routes = createBrowserRouter([
       {
         path: "add-product",
         element: <AddProduct />,
+      },
+      {
+        path: "admin-dashboard",
+        element: <AdminDashboard />,
+      },
+      {
+        path: "merchant-dashboard",
+        element: <MarchentDashboard />,
+      },
+      {
+        path: "user-dashboard",
+        element: <UserDashboard />,
       },
     ],
   },

@@ -8,11 +8,7 @@ import httpReq from "../../services/http.service";
 
 
 
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data: any;
-}
+
 
 interface authInitState {
   user: IAuthData | null;

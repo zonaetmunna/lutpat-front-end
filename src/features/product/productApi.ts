@@ -1,15 +1,28 @@
 import { IProduct } from "../../types";
 import apiSlice from "../api/apiSlice";
 
+
+interface ApiResponseData {
+    data: IProduct[];
+    message: string;
+    error: boolean;
+}
+
+interface ApiResponseSingle {
+    data: IProduct;
+    message: string;
+    error: boolean;
+}
+
 const productApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getProducts: builder.query<IProduct[], void>({
+        getProducts: builder.query<ApiResponseData, void>({
             query: () => ({
                 url: "/products",
             }),
             providesTags: ["product"],
         }),
-        getSingleProduct: builder.query({
+        getSingleProduct: builder.query<ApiResponseSingle, void>({
             query: (id) => ({
                 url: `/products/${id}`,
             }),
