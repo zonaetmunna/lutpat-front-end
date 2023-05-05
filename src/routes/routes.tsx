@@ -14,7 +14,7 @@ const Home = React.lazy(() => import("../view/pages/main/Home"));
 const SingleProduct = React.lazy(
   () => import("../view/pages/main/SingleProduct")
 );
-const Signup = React.lazy(() => import("../view/pages/main/SignUp"));
+const SignUp = React.lazy(() => import("../view/pages/main/SignUp"));
 const Login = React.lazy(() => import("../view/pages/main/Login"));
 const Cart = React.lazy(() => import("../view/pages/main/Cart"));
 const Wishlist = React.lazy(() => import("../view/pages/main/WishList"));
@@ -45,7 +45,7 @@ export const routes = createBrowserRouter([
       },
       {
         path: "signUp",
-        element: <Signup />,
+        element: <SignUp />,
       },
       {
         path: "login",

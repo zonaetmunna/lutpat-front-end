@@ -61,7 +61,7 @@ const Header = () => {
           <div className="mx-2">
             <Link to="/dashboard">Dashboard</Link>
           </div>
-          {!user ? (
+          {user ? (
             <div>
               <Link to="/account">
                 <span>
