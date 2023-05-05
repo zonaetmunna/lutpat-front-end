@@ -1,7 +1,7 @@
 import { IProduct } from "../../types";
 import apiSlice from "../api/apiSlice";
 
-
+// types
 interface ApiResponseData {
     data: IProduct[];
     message: string;
@@ -22,7 +22,7 @@ const productApi = apiSlice.injectEndpoints({
             }),
             providesTags: ["product"],
         }),
-        getSingleProduct: builder.query<ApiResponseSingle, void>({
+        getSingleProduct: builder.query<ApiResponseSingle, string>({
             query: (id) => ({
                 url: `/products/${id}`,
             }),

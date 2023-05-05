@@ -7,6 +7,11 @@ import { useDispatch } from "react-redux";
 import { IProduct } from "../../../types";
 import { addToCart } from "../../../features/cart/cartSlice";
 
+// types
+interface ProductParams {
+  id: string;
+}
+
 const SingleProduct = () => {
   const dispatch = useDispatch();
   const { id = "" } = useParams();
