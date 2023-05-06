@@ -1,7 +1,7 @@
 import React from "react";
-import ProductCard from "../../components/common/ProductCard";
-import Banner from "../../components/page/home/Banner";
-import { useGetProductsQuery } from "../../../features/product/productApi";
+import Banner from "../../../components/page/home/Banner";
+import ProductCard from "../../../components/common/ProductCard";
+import { useGetProductsQuery } from "../../../../features/product/productApi";
 
 const Home = () => {
   // api data

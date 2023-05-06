@@ -1,11 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import useAPI from "../../../hooks/useApi";
-import productService from "../../../services/product.service";
-import { useGetSingleProductQuery } from "../../../features/product/productApi";
+import useAPI from "../../../../hooks/useApi";
+import productService from "../../../../services/product.service";
+import { useGetSingleProductQuery } from "../../../../features/product/productApi";
 import { useDispatch } from "react-redux";
-import { IProduct } from "../../../types";
-import { addToCart } from "../../../features/cart/cartSlice";
+import { IProduct } from "../../../../types";
+import { addToCart } from "../../../../features/cart/cartSlice";
 
 // types
 interface ProductParams {

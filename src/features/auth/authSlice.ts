@@ -31,7 +31,7 @@ export const signupUser = createAsyncThunk<IAuthData, SignUpData>(
   "auth/signupUser",
   async (SignUpData, { rejectWithValue }) => {
     try {
-      // const response = await axios.post('/api/signup', userData);
+      // const response = await axios.post('/signup', userData);
       const response = await httpReq.post('/signup', SignUpData)
       console.log(response)
       return response.data;
@@ -45,10 +45,10 @@ export const loginUser = createAsyncThunk<IAuthData, LoginData>(
   "auth/loginUser",
   async (LoginData, { rejectWithValue }) => {
     try {
-      // const response = await axios.post('/api/signup', userData);
-      const response = await httpReq.post('/login', LoginData)
-      console.log(response.data);
-      return response.data;
+      const response = await axios.post('http://localhost:5001/api/auth/login', LoginData);
+      // const response = await httpReq.post('/auth/login', LoginData)
+      console.log(response.data.data);
+      return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
@@ -61,7 +61,16 @@ export const loginUser = createAsyncThunk<IAuthData, LoginData>(
 export const authSlice = createSlice({
   name: 'user',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    logOut: (state) => {
+      state.user = null
+    },
+    subscribedUser: (state, action) => {
+      state.user = action.payload;
+      state.isLoading = false;
+    }
+
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signupUser.pending, (state) => {
@@ -97,7 +106,7 @@ export const authSlice = createSlice({
   }
 });
 
-
+export const { logOut, subscribedUser } = authSlice.actions;
 export default authSlice.reducer;
 
 

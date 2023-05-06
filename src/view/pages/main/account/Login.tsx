@@ -2,9 +2,9 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { loginUser } from "../../../features/auth/authSlice";
-import { LoginData } from "../../../types";
-import { AppDispatch } from "../../../app/store";
+import { loginUser } from "../../../../features/auth/authSlice";
+import { LoginData } from "../../../../types";
+import { AppDispatch } from "../../../../app/store";
 
 const Login = () => {
   const { register, handleSubmit } = useForm<LoginData>();

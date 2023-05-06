@@ -3,12 +3,19 @@ import { Link } from "react-router-dom";
 import logo from "../../../assets/images/attachment_109048124.png";
 import { BsCart3, BsHeart, BsSearch } from "react-icons/bs";
 import { VscAccount } from "react-icons/vsc";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
+import { logOut } from "../../../features/auth/authSlice";
 
 const Header = () => {
   const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
   console.log(user);
+  console.log(user?.email);
+
+  const handleLogOut = () => {
+    dispatch(logOut());
+  };
 
   return (
     <div className="py-3 px-3">
@@ -63,11 +70,11 @@ const Header = () => {
           </div>
           {user ? (
             <div>
-              <Link to="/account">
+              <button onClick={handleLogOut}>
                 <span>
                   <VscAccount size={20} />
                 </span>
-              </Link>
+              </button>
             </div>
           ) : (
             <div>

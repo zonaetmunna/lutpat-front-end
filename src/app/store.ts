@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import apiSlice from '../features/api/apiSlice';
-import authSlice from '../features/auth/authSlice';
+import authReducer from '../features/auth/authSlice';
 import cartSlice from '../features/cart/cartSlice';
 // import filterSlice from '../features/filter/filterSlice';
 
@@ -10,7 +10,7 @@ import cartSlice from '../features/cart/cartSlice';
 export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
-    auth: authSlice,
+    auth: authReducer,
     cart: cartSlice,
     // filter: filterSlice
 

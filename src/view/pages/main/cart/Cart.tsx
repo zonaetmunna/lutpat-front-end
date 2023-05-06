@@ -1,7 +1,7 @@
 import React from "react";
-import { RootState } from "../../../app/store";
+import { RootState } from "../../../../app/store";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart } from "../../../features/cart/cartSlice";
+import { removeFromCart } from "../../../../features/cart/cartSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();

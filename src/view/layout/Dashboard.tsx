@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import SidebarTwo from "../components/dashboard/sidebar/SidebarTwo";
+import DashboardSidebar from "../components/dashboard/sidebar/DashboardSidebar";
 import DashboardNavbar from "../components/dashboard/navbar/DashboardNavbar";
 
 const Dashboard = () => {
@@ -8,7 +8,7 @@ const Dashboard = () => {
     <div>
       <DashboardNavbar />
       <div className="flex h-screen">
-        <SidebarTwo />
+        <DashboardSidebar />
         <div className="flex-grow bg-gray-100 p-6">
           <Outlet />
         </div>

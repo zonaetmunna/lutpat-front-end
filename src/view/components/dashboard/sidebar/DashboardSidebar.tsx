@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
   FiShoppingBag,
@@ -17,10 +17,11 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { BiMessageSquare } from "react-icons/bi";
-import { MdPeople, MdPerson } from "react-icons/md";
+import { MdPeople, MdPerson, MdDashboard } from "react-icons/md";
 import { RootState } from "../../../../app/store";
+import { logOut } from "../../../../features/auth/authSlice";
 
-const SidebarTwo = () => {
+const DashboardSidebar = () => {
   const { user } = useSelector((state: RootState) => state.auth);
 
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -50,6 +51,14 @@ const SidebarTwo = () => {
   const toggleOrderMenu = () => {
     setIsOrderOpen(!isOrderOpen);
   };
+
+  // logout
+  const dispatch = useDispatch();
+
+  const handleLogOut = () => {
+    dispatch(logOut());
+  };
+
   return (
     <div
       className={`${
@@ -62,13 +71,33 @@ const SidebarTwo = () => {
 
       {/* {!user.email === "merchant" && ( */}
       <nav className="flex flex-col py-4 ">
+        {/* dashboard */}
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="flex items-center py-2 px-4  hover:bg-gray-700 rounded-md"
+        >
+          <span className="mr-2">
+            <MdDashboard className="mr-4" />
+          </span>
+          <span className={`${isCollapsed ? "hidden" : ""}`}>Dashboard</span>
+        </button>
+        {/* shop */}
+        <button
+          onClick={() => navigate("shop-list")}
+          className="flex items-center py-2 px-4  hover:bg-gray-700 rounded-md"
+        >
+          <span className="mr-2">
+            <MdDashboard className="mr-4" />
+          </span>
+          <span className={`${isCollapsed ? "hidden" : ""}`}>Shop-List</span>
+        </button>
         {/* products */}
         <button
           className="flex items-center py-2 px-4 hover:bg-gray-700 rounded-md  transition-colors duration-200"
           onClick={toggleProductMenu}
         >
           <span className="mr-2">
-            <FaList />
+            <FaList className="mr-4" />
           </span>
           <span className={`${isCollapsed ? "hidden" : ""}`}>Products</span>
           {isProductOpen ? (
@@ -85,7 +114,7 @@ const SidebarTwo = () => {
             className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-700 rounded-md transition-colors duration-200"
           >
             <span className="mr-2">
-              <FaList />
+              <FaList className="mr-4" />
             </span>
             <span className={`${isCollapsed ? "hidden" : ""}`}>
               Product List
@@ -96,7 +125,7 @@ const SidebarTwo = () => {
             className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
           >
             <span className="mr-2">
-              <FaPlus />
+              <FaPlus className="mr-4" />
             </span>
             <span className={`${isCollapsed ? "hidden" : ""}`}>
               Add Product
@@ -109,7 +138,7 @@ const SidebarTwo = () => {
           onClick={toggleVendorMenu}
         >
           <span className="mr-2">
-            <FaUser />
+            <FaUser className="mr-4" />
           </span>
           <span className={`${isCollapsed ? "hidden" : ""}`}>Vendors</span>
           {isVendorOpen ? (
@@ -126,7 +155,7 @@ const SidebarTwo = () => {
             className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
           >
             <span className="mr-2">
-              <FaUser />
+              <FaUser className="mr-4" />
             </span>
             <span className={`${isCollapsed ? "hidden" : ""}`}>
               Vendors List
@@ -137,7 +166,7 @@ const SidebarTwo = () => {
             className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
           >
             <span className="mr-2">
-              <FaUser />
+              <FaUser className="mr-4" />
             </span>
             <span className={`${isCollapsed ? "hidden" : ""}`}>
               Vendor Profile
@@ -150,7 +179,7 @@ const SidebarTwo = () => {
           onClick={toggleCustomerMenu}
         >
           <span className="mr-2">
-            <MdPerson />
+            <MdPerson className="mr-4" />
           </span>
           <span className={`${isCollapsed ? "hidden" : ""}`}>Customer</span>
           {isCustomerOpen ? (
@@ -167,7 +196,7 @@ const SidebarTwo = () => {
             className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
           >
             <span className="mr-2">
-              <MdPeople />
+              <MdPeople className="mr-4" />
             </span>
             <span className={`${isCollapsed ? "hidden" : ""}`}>
               Customer List
@@ -178,7 +207,7 @@ const SidebarTwo = () => {
             className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
           >
             <span className="mr-2">
-              <FaUser />
+              <FaUser className="mr-4" />
             </span>
             <span className={`${isCollapsed ? "hidden" : ""}`}>Customer</span>
           </Link>
@@ -257,7 +286,10 @@ const SidebarTwo = () => {
       {/* )} */}
       {/* logout */}
       <div className="flex items-center justify-center">
-        <button className="flex items-center py-2 px-4 bg-red-500 text-white rounded-full hover:bg-red-700 transition-colors duration-200">
+        <button
+          onClick={handleLogOut}
+          className="flex items-center py-2 px-4 bg-red-500 text-white rounded-full hover:bg-red-700 transition-colors duration-200"
+        >
           <span className="mr-2">
             <FiLogOut className="mr-4" />
           </span>
@@ -278,4 +310,4 @@ const SidebarTwo = () => {
   );
 };
 
-export default SidebarTwo;
+export default DashboardSidebar;

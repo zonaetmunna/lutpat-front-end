@@ -2,10 +2,11 @@ import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { FiMaximize, FiMinimize, FiMoon, FiSun } from "react-icons/fi";
 import { FaUserCircle, FaBell, FaEnvelope } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BiMessageSquare } from "react-icons/bi";
 import { motion } from "framer-motion";
-import { RootState } from "@reduxjs/toolkit/dist/query/core/apiState";
+import { RootState } from "../../../../app/store";
+import { logOut } from "../../../../features/auth/authSlice";
 
 const DashboardNavbar = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -64,6 +65,7 @@ const DashboardNavbar = () => {
       setNewMessage("");
     }
   };
+
   const iconVariants = {
     open: {
       rotate: 90,
@@ -75,7 +77,7 @@ const DashboardNavbar = () => {
     },
   };
 
-  //   const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const handleNotifications = () => {
     setShowNotifications(!showNotifications);
@@ -113,6 +115,16 @@ const DashboardNavbar = () => {
       }
     }
   };
+
+  // logout handle
+  const dispatch = useDispatch();
+  console.log(user);
+  console.log(user?.email);
+
+  const handleLogOut = () => {
+    dispatch(logOut());
+  };
+
   return (
     <nav
       className={`px-4 py-3 ${
@@ -237,51 +249,53 @@ const DashboardNavbar = () => {
             </div>
 
             {/* user */}
-            {/* {email && ( */}
-            <div className="ml-3 relative">
-              <div>
-                <button
-                  onClick={handleUserDropdown}
-                  className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                  id="user-menu"
-                  aria-haspopup="true"
-                >
-                  <span className="sr-only">Open user menu</span>
-                  <FaUserCircle className="h-8 w-8 rounded-full text-gray-400" />
-                </button>
-              </div>
-              {showUserDropdown && (
-                <div
-                  className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="user-menu"
-                >
-                  <Link
-                    to="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem"
+            {user?.email && (
+              <div className="ml-3 relative">
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={handleUserDropdown}
+                    className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                    id="user-menu"
+                    aria-haspopup="true"
                   >
-                    Your Profile
-                  </Link>
-                  <Link
-                    to="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem"
-                  >
-                    Settings
-                  </Link>
-                  <Link
-                    to="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem"
-                  >
-                    Sign out
-                  </Link>
+                    <span className="sr-only">Open user menu</span>
+                    <FaUserCircle className="h-8 w-8 rounded-full text-gray-400" />
+                  </button>
+                  <p>{user.name}</p>
                 </div>
-              )}
-            </div>
-            {/* )} */}
+                {showUserDropdown && (
+                  <div
+                    className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="user-menu"
+                  >
+                    <Link
+                      to="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      Your Profile
+                    </Link>
+                    <Link
+                      to="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      Settings
+                    </Link>
+                    <Link
+                      to="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                      onClick={handleLogOut}
+                    >
+                      Sign out
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

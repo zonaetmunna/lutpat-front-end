@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { AppThunk, RootState } from "../../../app/store";
-import { SignUpData } from "../../../types";
-import { signupUser } from "../../../features/auth/authSlice";
-import { AppDispatch } from "../../../app/store";
+
+import { SignUpData } from "../../../../types";
+import { signupUser } from "../../../../features/auth/authSlice";
+import { AppDispatch, RootState } from "../../../../app/store";
 
 // interface
 /* interface IFormInput {
@@ -33,7 +33,7 @@ const SignUp = () => {
       phone: data.phone,
     };
     dispatch(signupUser(userData));
-    reset();
+    // reset();
   };
 
   // redirect
