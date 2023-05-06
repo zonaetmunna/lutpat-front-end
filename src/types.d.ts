@@ -19,23 +19,14 @@ export interface IAuthData {
   token: string;
 }
 
-// auth interface
-/* interface IUserData {
-  name: string;
-  email: string;
-  id: string;
-  role: string;
-  status: string;
-  token: string;
-}; */
 // types signup data
-interface SignUpData {
+export interface SignUpData {
   name: string;
   email: string;
   password: string;
   phone: number
 }
-interface loginData {
+export interface LoginData {
   email: string;
   password: string;
 }

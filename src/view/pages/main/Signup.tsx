@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -32,12 +32,16 @@ const SignUp = () => {
       password: data.password,
       phone: data.phone,
     };
-    dispatch(signupUser());
-    if (data) {
-      navigate("/");
-    }
+    dispatch(signupUser(userData));
     reset();
   };
+
+  // redirect
+  /* useEffect(() => {
+    if (!isLoading && user.email) {
+      navigate("/");
+    }
+  }, []); */
 
   return (
     <div className="container mx-auto">
