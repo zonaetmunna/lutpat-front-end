@@ -1,19 +1,17 @@
 import React from "react";
+import { Store } from "../../../../types";
 
-type DeleteModalProps = {
-  shop: {
-    id: number;
-    name: string;
-    address: string;
-    location: string;
-    category: string;
-    status: string;
-  };
-  onSubmit: () => void;
+interface DeleteModalProps {
   onClose: () => void;
-};
+  onDeleteBrand: (brandId: string) => void;
+  store: Store;
+}
 
-const DeleteModal = ({ shop, onSubmit, onClose }: DeleteModalProps) => {
+const DeleteModal = ({ store, onDeleteBrand, onClose }: DeleteModalProps) => {
+  const handleDelete = () => {
+    onDeleteBrand(store._id);
+    onClose();
+  };
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
@@ -56,7 +54,7 @@ const DeleteModal = ({ shop, onSubmit, onClose }: DeleteModalProps) => {
                 className="text-lg leading-6 font-medium text-gray-900"
                 id="modal-headline"
               >
-                Delete {shop.name}?
+                Delete {store.name}?
               </h3>
               <div className="mt-2">
                 <p className="text-sm text-gray-500">
@@ -68,7 +66,7 @@ const DeleteModal = ({ shop, onSubmit, onClose }: DeleteModalProps) => {
           </div>
           <div className="mt-5 sm:mt-6">
             <button
-              onClick={onSubmit}
+              onClick={handleDelete}
               type="button"
               className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm"
             >

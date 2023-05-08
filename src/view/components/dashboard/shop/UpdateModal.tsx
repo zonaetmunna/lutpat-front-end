@@ -1,137 +1,119 @@
 import React, { useState } from "react";
+import { Store, StoreDataForm } from "../../../../types";
+import { useForm } from "react-hook-form";
 
-type UpdateModalProps = {
-  shop: {
-    id: number;
-    name: string;
-    address: string;
-    location: string;
-    category: string;
-    status: string;
-  } | null;
-  onSubmit: (updatedShop: {
-    id: number;
-    name: string;
-    address: string;
-    location: string;
-    category: string;
-    status: string;
-  }) => void;
+interface EditBrandModalProps {
   onClose: () => void;
-};
+  onUpdateBrand: (store: StoreDataForm) => void;
+  store: Store;
+}
 
-const UpdateModal = ({ shop, onSubmit, onClose }: UpdateModalProps) => {
-  const [updatedShop, setUpdatedShop] = useState(shop);
+const UpdateModal = ({
+  onClose,
+  onUpdateBrand,
+  store,
+}: EditBrandModalProps) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<StoreDataForm>({
+    defaultValues: {
+      name: store.name,
+      location: store.location,
+    },
+  });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    // setUpdatedShop({ ...updatedShop, [name]: value });
+  const onSubmit = (data: StoreDataForm) => {
+    onUpdateBrand(data);
+    onClose();
   };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // onSubmit(updatedShop);
-  };
-
   return (
-    <div className="fixed z-10 inset-0 overflow-y-auto">
-      <div className="p-6">
-        <h2 className="text-lg font-medium mb-4">Update Shop</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="name"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              className="border-gray-300 rounded-lg w-full py-2 px-3"
-              //   value={updatedShop.name}
-              onChange={handleChange}
-              required
-            />
+    <div
+      className="fixed z-10 inset-0 overflow-y-auto"
+      aria-labelledby="modal-title"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div
+          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          aria-hidden="true"
+        ></div>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <h3
+                className="text-lg leading-6 font-medium text-gray-900"
+                id="modal-title"
+              >
+                Edit Brand
+              </h3>
+              <div className="mt-4">
+                <div className="mb-4">
+                  <label
+                    htmlFor="name"
+                    className="block text-gray-700 font-bold mb-2"
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    {...register("name", {
+                      required: "This field is required",
+                    })}
+                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                      errors.name ? "border-red-500" : ""
+                    }`}
+                  />
+                  {errors.name && (
+                    <p className="text-red-500 text-xs italic">
+                      {errors.name.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="location"
+                    className="block text-gray-700 font-bold mb-2"
+                  >
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    {...register("location", {
+                      required: "This field is required",
+                    })}
+                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                      errors.location ? "border-red-500" : ""
+                    }`}
+                  />
+                  {errors.location && (
+                    <p className="text-red-500 text-xs italic">
+                      {errors.location.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <button
+                type="submit"
+                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+              >
+                Update
+              </button>
+              {/* <button
+                type="button"
+                onClick={() => setIsUpdateBrandModalOpen(false)}
+                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+              >
+                Cancel
+              </button> */}
+            </div>
           </div>
-          <div className="mb-4">
-            <label
-              htmlFor="address"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Address
-            </label>
-            <input
-              id="address"
-              className="border-gray-300 rounded-lg w-full py-2 px-3 resize-none"
-              //   value={updatedShop.address}s
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="location"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Location
-            </label>
-            <select
-              id="location"
-              className="border-gray-300 rounded-lg w-full py-2 px-3"
-              //   value={updatedShop.location}
-              //   onChange={handleChange}
-              required
-            >
-              <option value="">Select Location</option>
-              <option value="New York">New York</option>
-              <option value="Los Angeles">Los Angeles</option>
-              <option value="Chicago">Chicago</option>
-              <option value="Houston">Houston</option>
-              <option value="Miami">Miami</option>
-            </select>
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="category"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Category
-            </label>
-            <select
-              id="category"
-              className="border-gray-300 rounded-lg w-full py-2 px-3"
-              //   value={updatedShop.category}
-              //   onChange={handleChange}
-              required
-            >
-              <option value="">Select Category</option>
-              <option value="Grocery">Grocery</option>
-              <option value="Clothing">Clothing</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Pharmacy">Pharmacy</option>
-              <option value="Restaurant">Restaurant</option>
-            </select>
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="status"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Status
-            </label>
-            <select
-              id="status"
-              //   value={updatedShop.status}
-              //   onChange={handleChange}
-              className="border-gray-300 rounded-lg w-full py-2 px-3"
-              required
-            >
-              <option value="">Select Status</option>
-              <option value="active">active</option>
-              <option value="inactive">inactive</option>
-            </select>
-          </div>
-          <button type="submit">Update Shop</button>
         </form>
       </div>
     </div>

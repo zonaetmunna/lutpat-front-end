@@ -21,6 +21,9 @@ import DashboardDefault from "../view/pages/dashboard/dashboardDefault/Dashboard
 import ShopList from "../view/pages/dashboard/shop/ShopList";
 import SingleShop from "../view/pages/dashboard/shop/SingleShop";
 import PrivateRoute from "./PrivateRoute";
+import Shop from "../view/pages/main/shop/Shop";
+import ShopDetails from "../view/pages/main/shop/ShopDetails";
+import SellerRegistration from "../view/pages/main/account/SellerRegistration";
 const Main = React.lazy(() => import("../view/layout/Main"));
 const Home = React.lazy(() => import("../view/pages/main/home/Home"));
 const SingleProduct = React.lazy(
@@ -60,12 +63,24 @@ export const routes = createBrowserRouter([
         element: <SingleProduct />,
       },
       {
+        path: "shop",
+        element: <Shop />,
+      },
+      {
+        path: "shop/:id",
+        element: <ShopDetails />,
+      },
+      {
         path: "signUp",
         element: <SignUp />,
       },
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "seller-registration",
+        element: <SellerRegistration />,
       },
       {
         path: "cart",

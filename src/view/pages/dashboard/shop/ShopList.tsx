@@ -1,125 +1,97 @@
 import React, { ChangeEvent, useState } from "react";
-import { FaSort } from "react-icons/fa";
+import { FaSearch, FaSort } from "react-icons/fa";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import DeleteModal from "../../../components/dashboard/shop/DeleteModal";
-import UpdateModal from "../../../components/dashboard/shop/UpdateModal";
 import { Link } from "react-router-dom";
+import {
+  useAddProductMutation,
+  useGetProductsQuery,
+} from "../../../../features/product/productApi";
+import { Store, StoreDataForm } from "../../../../types";
+import {
+  useAddStoreMutation,
+  useDeleteStoreMutation,
+  useGetStoreQuery,
+  useUpdateStoreMutation,
+} from "../../../../features/store/storeApi";
 import SingleShop from "./SingleShop";
+import AddStoreModal from "../../../components/dashboard/shop/AddStoreModal";
+import UpdateModal from "../../../components/dashboard/shop/UpdateModal";
+import DeleteModal from "../../../components/dashboard/shop/DeleteModal";
+import Pagination from "../../../components/dashboard/common/Pagination";
 
-const shopList = [
-  {
-    id: 1,
-    name: "Shop 1",
-    location: "Location 1",
-    category: "va",
-    status: "Open",
-    update: <FiEdit />,
-    delete: <FiTrash2 />,
-  },
-  {
-    id: 2,
-    name: "Shop 2",
-    location: "Location 2",
-    category: "dal",
-    status: "Open",
-    update: <FiEdit />,
-    delete: <FiTrash2 />,
-  },
-  {
-    id: 3,
-    name: "Shop 3",
-    location: "Location 3",
-    category: "cloth",
-    status: "Open",
-    update: <FiEdit />,
-    delete: <FiTrash2 />,
-  },
-  {
-    id: 4,
-    name: "Shop 4",
-    location: "Location 4",
-    category: "beauti",
-    status: "Open",
-    update: <FiEdit />,
-    delete: <FiTrash2 />,
-  },
-  {
-    id: 5,
-    name: "Shop 5",
-    location: "Location 5",
-    category: "electtronics",
-    status: "Open",
-    update: <FiEdit />,
-    delete: <FiTrash2 />,
-  },
-  {
-    id: 6,
-    name: "Shop 6",
-    location: "Location 6",
-    category: "leptop",
-    status: "Open",
-    update: <FiEdit />,
-    delete: <FiTrash2 />,
-  },
-];
-
-interface Shop {
-  id: number;
-  name: string;
-  address: string;
-  location: string;
-  category: string;
-  status: string;
-}
+// types give store information for server
 
 const ShopList = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(5);
-  const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-  const [currentShop, setCurrentShop] = useState<Shop | null>(null);
-  const [showShopDetails, setShowShopDetails] = useState(false);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [selectedBrand, setSelectedBrand] = useState<Store | null>(null);
+  const [isAddBrandModalOpen, setIsAddBrandModalOpen] =
+    useState<boolean>(false);
+  const [isSingleBrandModalOpen, setIsSingleBrandModalOpen] =
+    useState<boolean>(false);
+  const [isUpdateBrandModalOpen, setIsUpdateBrandModalOpen] =
+    useState<boolean>(false);
+  const [isDeleteBrandModalOpen, setIsDeleteBrandModalOpen] =
+    useState<boolean>(false);
+  const total = 10;
 
-  // Calculate total number of pages
-  const totalPages = Math.ceil(shopList.length / pageSize);
+  // get query
+  const { data, isLoading } = useGetStoreQuery();
+  console.log(data);
+  const store = data?.data;
+  // post query
+  const [addStore] = useAddStoreMutation();
+  // get single brand
+  // const { data } = useGetSingleBrandQuery()
+  // delete mutation
+  const [deleteStore] = useDeleteStoreMutation();
+  // update mutation
+  const [updateStore] = useUpdateStoreMutation();
 
-  // Calculate index of last shop on current page
-  const indexOfLastShop = currentPage * pageSize;
+  // input
+  const [displayData, setDisplayData] = useState<Store[]>([]);
 
-  // Calculate index of first shop on current page
-  const indexOfFirstShop = indexOfLastShop - pageSize;
-
-  // Get shops on current page
-  const currentShops = shopList.slice(indexOfFirstShop, indexOfLastShop);
-
-  const handlePageSizeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setPageSize(Number(event.target.value));
-    setCurrentPage(1); // Reset to first page
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchText = e.target.value.toLowerCase();
+    const matchedResult = store?.filter((elem) =>
+      elem.name.toLowerCase().includes(searchText)
+    );
+    setDisplayData(matchedResult || []);
   };
 
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
+  const handleAddBrand = (store: StoreDataForm) => {
+    addStore(store);
   };
 
-  // Delete a shop from the list
-  const handleUpdateClick = (shop: Shop) => {
-    setCurrentShop(shop);
-    setUpdateModalOpen(true);
+  const handleUpdateBrand = (store: StoreDataForm) => {
+    updateStore(store);
   };
 
-  const handleDeleteClick = (shop: Shop) => {
-    setCurrentShop(shop);
-    setDeleteModalOpen(true);
+  const handleDeleteBrand = (id: string) => {
+    deleteStore(id);
   };
 
-  const handleUpdateSubmit = (updatedShop: Shop) => {
-    // Code to update shop in list
-    setUpdateModalOpen(false);
+  const handleBrandClick = (store: Store) => {
+    setSelectedBrand(store);
+    setIsSingleBrandModalOpen(true);
   };
 
-  const handleDeleteSubmit = () => {
-    // Code to delete shop from list
-    setDeleteModalOpen(false);
+  const handleUpdateClick = (store: Store) => {
+    setSelectedBrand(store);
+    setIsUpdateBrandModalOpen(true);
+  };
+
+  const handleDeleteClick = (store: Store) => {
+    setSelectedBrand(store);
+    setIsDeleteBrandModalOpen(true);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
   };
 
   // shop single
@@ -131,125 +103,121 @@ const ShopList = () => {
 
   return (
     <div className="container mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Shop List</h1>
-      <div className="mb-4">
-        <label htmlFor="pageSize">Page size:</label>
-        <select
-          id="pageSize"
-          className="ml-2 border border-gray-300 rounded p-1"
-          value={pageSize}
-          onChange={handlePageSizeChange}
-        >
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </select>
+      <h1 className="text-2xl font-bold mb-4">Brand List</h1>
+      {/* input and button section */}
+      <div className="flex justify-between items-center my-5">
+        {/* input field */}
+        <div className="relative flex items-center bg-white">
+          <input
+            type="text"
+            placeholder="Search brands"
+            className="py-2 pl-10 pr-4 block w-full rounded-md bg-white text-gray-800 border-gray-300 focus:outline-none  focus:border-gray-500"
+            onChange={(e) => handleSearch(e)}
+          />
+          <span className="absolute left-3 top-2">
+            <FaSearch className="text-gray-600 w-5 h-5" />
+          </span>
+        </div>
+        {/* add brand */}
+        <div className="w-full md:w-3/4 lg:w-1/2 xl:w-1/3 flex items-center ">
+          <button
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => setIsAddBrandModalOpen(true)}
+          >
+            Add Brand
+          </button>
+        </div>
       </div>
-      <table className="table-auto w-full">
-        <thead>
-          <tr>
-            <th className="px-4 py-2">#</th>
-            <th className="px-4 py-2">
-              Name{" "}
-              <FaSort className="inline-block ml-1 text-gray-400 cursor-pointer hover:text-gray-600" />
-            </th>
-            <th className="px-4 py-2">
-              Location{" "}
-              <FaSort className="inline-block ml-1 text-gray-400 cursor-pointer hover:text-gray-600" />
-            </th>
-            <th className="px-4 py-2">
-              Category{" "}
-              <FaSort className="inline-block ml-1 text-gray-400 cursor-pointer hover:text-gray-600" />
-            </th>
-            <th className="px-4 py-2">
-              Status{" "}
-              <FaSort className="inline-block ml-1 text-gray-400 cursor-pointer hover:text-gray-600" />
-            </th>
-            <th className="px-4 py-2">
-              Action{" "}
-              <FaSort className="inline-block ml-1 text-gray-400 cursor-pointer hover:text-gray-600" />
-            </th>
-            <th className="px-4 py-2">
-              Details{" "}
-              {/* <FaSort className="inline-block ml-1 text-gray-400 cursor-pointer hover:text-gray-600" /> */}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentShops.map((shop, index) => (
-            <tr
-              key={shop.id}
-              //   onClick={() => handleShopClick(shop)}
-            >
-              <td className="border px-4 py-2">{index + 1}</td>
-              <td className="border px-4 py-2">{shop.name}</td>
-              <td className="border px-4 py-2">{shop.location}</td>
-              <td className="border px-4 py-2">{shop.category}</td>
-              <td className="border px-4 py-2">{shop.status}</td>
-              <td className="border px-4 py-2">
-                <button
-                  className="text-blue-600 hover:text-blue-900 mr-4"
-                  //   onClick={() => handleUpdateClick(shop)}
-                >
-                  {shop.update}
-                </button>
-                <button
-                  className="text-blue-600 hover:text-blue-900 mr-4"
-                  //   onClick={() => handleDeleteClick(shop)}
-                >
-                  {shop.delete}
-                </button>
-              </td>
-              <td>
-                <Link to={`/shops/${shop.id}`}>Details</Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
 
-      {/*  */}
-      <div className="my-4">
-        <p className="text-sm text-gray-600">
-          Showing {indexOfFirstShop + 1} to {indexOfLastShop} of{" "}
-          {shopList.length} shops
-        </p>
-        <ul className="flex space-x-2">
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-            (pageNumber) => (
-              <li key={pageNumber}>
-                <button
-                  className={`border border-gray-300 rounded px-2 py-1 ${
-                    pageNumber === currentPage
-                      ? "bg-gray-300 text-gray-800"
-                      : "text-gray-500 hover:bg-gray-200"
-                  }`}
-                  onClick={() => handlePageChange(pageNumber)}
-                >
-                  {pageNumber}
-                </button>
-              </li>
-            )
-          )}
-        </ul>
-      </div>
-      {/* future work */}
-      {/*  {updateModalOpen && (
+      {/* table */}
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          <table className="table-auto w-full">
+            <thead>
+              <tr>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Email</th>
+                <th className="px-4 py-2">Description</th>
+                <th className="px-4 py-2">Location</th>
+                <th className="px-4 py-2">status</th>
+                <th className="px-4 py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayData?.map((brand) => (
+                <tr key={brand._id}>
+                  <td className="border px-4 py-2">{brand.name}</td>
+                  <td className="border px-4 py-2">{brand.email}</td>
+                  <td className="border px-4 py-2"></td>
+                  <td className="border px-4 py-2">{brand.location}</td>
+                  <td className="border px-4 py-2">{brand.status}</td>
+                  <td className="border px-4 py-2">
+                    <button
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                      onClick={() => handleBrandClick(brand)}
+                    >
+                      View
+                    </button>
+                    <button
+                      className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2"
+                      onClick={() => handleUpdateClick(brand)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                      onClick={() => handleDeleteClick(brand)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
+
+      {/* pagination */}
+      <Pagination
+        total={total}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
+      />
+      {/* view modal */}
+      {/* future update */}
+      {/*  {isSingleBrandModalOpen && (
+        <SingleShop
+          onClose={() => setIsSingleBrandModalOpen(false)}
+          brand={selectedBrand}
+        />
+      )} */}
+      {/* add brand modal */}
+      {isAddBrandModalOpen && (
+        <AddStoreModal
+          onClose={() => setIsAddBrandModalOpen(false)}
+          onAddBrand={handleAddBrand}
+        />
+      )}
+      {/* update and delete modal */}
+      {selectedBrand && isUpdateBrandModalOpen && (
         <UpdateModal
-          shop={currentShop}
-          onSubmit={handleUpdateSubmit}
-          onClose={() => setUpdateModalOpen(false)}
+          onClose={() => setIsUpdateBrandModalOpen(false)}
+          onUpdateBrand={handleUpdateBrand}
+          store={selectedBrand}
         />
       )}
-
-      {deleteModalOpen && (
+      {selectedBrand && isDeleteBrandModalOpen && (
         <DeleteModal
-          shop={currentShop}
-          onSubmit={handleDeleteSubmit}
-          onClose={() => setDeleteModalOpen(false)}
+          onClose={() => setIsDeleteBrandModalOpen(false)}
+          onDeleteBrand={handleDeleteBrand}
+          store={selectedBrand}
         />
       )}
-      {showShopDetails && <SingleShop shop={currentShop} />} */}
     </div>
   );
 };

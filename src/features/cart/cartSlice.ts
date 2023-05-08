@@ -1,63 +1,67 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IProduct } from "../../types";
+import { RootState } from "../../app/store";
 
 
-interface CartState {
-    cart: {
-        _id?: string;
-        name: string;
-        category: string;
-        description: string;
-        image: string;
-        price: number;
-        store: string;
-        quantity: number
-    }[];
+interface CartProduct {
+    _id?: string;
+    name: string;
+    category: string;
+    description: string;
+    image: string;
+    price: number;
+    store: string;
+    quantity: number;
 }
 
-const initialState: CartState = {
-    cart: [],
+interface ICartState {
+    items: CartProduct[];
+}
+
+
+const initialState: ICartState = {
+    items: [],
 };
 
 export const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addToCart: (state, action) => {
-            const selectedProduct = state.cart.find(
-                (product) => product._id === action.payload
+        addItem: (state, action: PayloadAction<CartProduct>) => {
+            const itemIndex = state.items.findIndex(
+                (item) => item._id === action.payload._id
             );
-            if (!selectedProduct) {
-                const product = { ...action.payload, quantity: 1 };
-                state.cart.push(product);
+
+            if (itemIndex >= 0) {
+                // If the item is already in the cart, increase the quantity
+                state.items[itemIndex].quantity += action.payload.quantity;
             } else {
-                selectedProduct.quantity += 1;
-                state.cart
-                    .filter((product) => product._id !== selectedProduct._id)
-                    .push(selectedProduct);
+                // Otherwise, add the item to the cart
+                state.items.push(action.payload);
             }
         },
-        removeFromCart: (state, action) => {
-            if (action.payload.quantity > 1) {
-                const product = {
-                    ...action.payload,
-                    quantity: action.payload.quantity - 1,
-                };
+        removeItem: (state, action: PayloadAction<string>) => {
+            state.items = state.items.filter((item) => item._id !== action.payload);
+        },
+        updateItemQuantity: (state, action: PayloadAction<{ id: string; quantity: number }>) => {
+            const itemIndex = state.items.findIndex(
+                (item) => item._id === action.payload.id
+            );
 
-                state.cart = state.cart.filter(
-                    (product) => product._id !== action.payload._id
-                );
-
-                state.cart.push(product);
-            } else {
-                state.cart = state.cart.filter(
-                    (product) => product._id !== action.payload._id
-                );
+            if (itemIndex >= 0) {
+                state.items[itemIndex].quantity = action.payload.quantity;
             }
         },
-        clearCart: (state) => { },
+        clearCart: (state) => {
+            state.items = [];
+        },
     },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addItem, removeItem, updateItemQuantity, clearCart } = cartSlice.actions;
+export const selectCartItems = (state: RootState) => state.cart.items;
+
+export const selectCartTotal = (state: RootState) =>
+    state.cart.items.reduce((total, item) => total + item.price * item.quantity, 0);
+
 export default cartSlice.reducer;
