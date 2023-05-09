@@ -5,6 +5,7 @@ import { useGetProductsQuery } from "../../../../features/product/productApi";
 import Slider from "../../../components/main/home/Slider";
 import FilterSidebar from "../../../components/common/FilterSidebar";
 import { IProduct } from "../../../../types";
+import DeleveryOption from "../../../components/main/home/DeleveryOption";
 
 interface IFilter {
   category: string;
@@ -59,6 +60,10 @@ const Home = () => {
     <div className="container mx-auto bg-gray-100">
       <div className="mt-10">
         <Slider products={data?.data} />
+      </div>
+
+      <div className="my-10">
+        <DeleveryOption />
       </div>
 
       <div className="bg-gray-100 mt-10">

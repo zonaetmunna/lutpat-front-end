@@ -33,15 +33,15 @@ const SignUp = () => {
       phone: data.phone,
     };
     dispatch(signupUser(userData));
-    // reset();
+    reset();
   };
 
   // redirect
-  /* useEffect(() => {
-    if (!isLoading && user.email) {
+  useEffect(() => {
+    if (!isLoading && user?.email) {
       navigate("/");
     }
-  }, []); */
+  }, []);
 
   return (
     <div className="container mx-auto">

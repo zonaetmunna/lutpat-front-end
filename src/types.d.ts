@@ -24,7 +24,10 @@ export interface SignUpData {
   name: string;
   email: string;
   password: string;
-  phone: number
+  phone: string;
+  role?: string;
+  status?: string;
+  profileImage?: FileList;
 }
 export interface LoginData {
   email: string;

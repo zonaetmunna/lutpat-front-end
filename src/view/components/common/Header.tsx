@@ -46,6 +46,21 @@ const Header = () => {
                 <p className="text-yellow-500">Shop</p>
               </Link>
             </div>
+            <div className="mx-2 rounded-full font-bold">
+              <Link to="/Offer">
+                <p className="text-yellow-500">Offer</p>
+              </Link>
+            </div>
+            <div className="mx-2 rounded-full font-bold">
+              <Link to="/faq">
+                <p className="text-yellow-500">Faq</p>
+              </Link>
+            </div>
+            <div className="mx-2 rounded-full font-bold">
+              <Link to="/contact">
+                <p className="text-yellow-500">Contact</p>
+              </Link>
+            </div>
           </div>
           <div className="flex justify-around items-center">
             {/* wishlist */}

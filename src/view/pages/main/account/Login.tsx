@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../../../features/auth/authSlice";
 import { LoginData } from "../../../../types";
-import { AppDispatch } from "../../../../app/store";
+import { AppDispatch, RootState } from "../../../../app/store";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm<LoginData>();
+  const { register, handleSubmit, reset } = useForm<LoginData>();
+  const { user, isLoading, error, isError } = useSelector(
+    (state: RootState) => state.auth
+  );
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const handleLogin = (data: LoginData) => {
     console.log(data);
@@ -17,7 +21,15 @@ const Login = () => {
       password: data.password,
     };
     dispatch(loginUser(logData));
+    reset();
   };
+
+  // redirect
+  useEffect(() => {
+    if (!isLoading && user?.email) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className="container mx-auto">

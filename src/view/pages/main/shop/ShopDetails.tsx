@@ -18,7 +18,7 @@ const ShopDetails = () => {
     data: datas,
     isLoading: productLoading,
     isError: productError,
-  } = useGetProductsQuery(id, categoryFilter);
+  } = useGetProductsQuery();
 
   const products = datas?.data;
 
@@ -40,7 +40,6 @@ const ShopDetails = () => {
 
   return (
     <div className="container mx-auto bg-gray-100">
-      <h1>{store.name}</h1>
       <div>
         <label htmlFor="category-select">Filter by category:</label>
         <select
@@ -54,10 +53,38 @@ const ShopDetails = () => {
           <option value="category3">Category 3</option>
         </select>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products?.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        ))}
+      <div className="flex flex-col lg:flex-row">
+        <div className="w-full lg:w-1/4 bg-white hidden sm:block overflow-y-auto">
+          <div className="p-4 rounded-lg shadow-md">
+            <h2 className="text-lg font-medium mb-4">Shop Information</h2>
+            <div>
+              <p className="text-gray-600 font-medium">Name:</p>
+              <p className="text-gray-900 font-medium">{store?.name ?? ""}</p>
+            </div>
+
+            <div>
+              <p className="text-gray-600 font-medium">Phone:</p>
+              {/* <p className="text-gray-900 font-medium">{store.phone}</p> */}
+            </div>
+            <div>
+              <p className="text-gray-600 font-medium">Email:</p>
+              {/* <p className="text-gray-900 font-medium">{store.email}</p> */}
+            </div>
+          </div>
+        </div>
+        <div className="w-full lg:w-3/4 h-full overflow-y-auto">
+          <div className="p-4 bg-gray-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products && products.length > 0 ? (
+                products.map((product) => (
+                  <ProductCard key={product._id} product={product} />
+                ))
+              ) : (
+                <div>No products found.</div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

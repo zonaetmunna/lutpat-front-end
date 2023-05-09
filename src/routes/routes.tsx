@@ -24,6 +24,9 @@ import PrivateRoute from "./PrivateRoute";
 import Shop from "../view/pages/main/shop/Shop";
 import ShopDetails from "../view/pages/main/shop/ShopDetails";
 import SellerRegistration from "../view/pages/main/account/SellerRegistration";
+import Offer from "../view/pages/main/offer/Offer";
+import Faq from "../view/pages/main/faq/Faq";
+import Settings from "../view/pages/dashboard/settings/Settings";
 const Main = React.lazy(() => import("../view/layout/Main"));
 const Home = React.lazy(() => import("../view/pages/main/home/Home"));
 const SingleProduct = React.lazy(
@@ -71,6 +74,14 @@ export const routes = createBrowserRouter([
         element: <ShopDetails />,
       },
       {
+        path: "offer",
+        element: <Offer />,
+      },
+      {
+        path: "faq",
+        element: <Faq />,
+      },
+      {
         path: "signUp",
         element: <SignUp />,
       },
@@ -99,7 +110,11 @@ export const routes = createBrowserRouter([
         element: <Contact />,
       },
       {
-        path: "PrivacyPolicy",
+        path: "about",
+        element: <About />,
+      },
+      {
+        path: "privacy",
         element: <PrivacyPolicy />,
       },
       {
@@ -184,6 +199,10 @@ export const routes = createBrowserRouter([
       {
         path: "message",
         element: <Message />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
       },
     ],
   },

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { IProduct } from "../../../types";
-import Select, { ValueType } from "react-select";
+import Select from "react-select";
+import ValueType from "react-select";
+import OptionTypeBase from "react-select";
 import Range from "rc-slider";
 import "rc-slider/assets/index.css";
 
@@ -30,11 +32,13 @@ const FilterSidebar = ({
   ];
 
   const handleCategoryChange = (selectedOption: ValueType) => {
-    onFilterChange({ category: selectedOption.value });
+    onFilterChange({ category: (selectedOption as any)?.value });
   };
 
   const handlePriceChange = (values: [number, number]) => {
-    onFilterChange({ priceRange: { min: values[0], max: values[1] } });
+    if (Array.isArray(values)) {
+      onFilterChange({ priceRange: { min: values[0], max: values[1] } });
+    }
   };
 
   const maxPrice = Math.max(...products?.map((product) => product.price), 0);
@@ -66,11 +70,10 @@ const FilterSidebar = ({
           Price Range
         </label>
         <Range
-          id="price"
           min={0}
           max={maxPrice}
           value={[filter.priceRange.min, filter.priceRange.max]}
-          onChange={handlePriceChange}
+          onChange={(value) => handlePriceChange(value as [number, number])}
           allowCross={false}
         />
         <div className="flex justify-between text-sm text-gray-600 mt-2">

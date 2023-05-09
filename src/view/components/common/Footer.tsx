@@ -35,15 +35,15 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="#"
+                  to="privacy"
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
-                  Products
+                  Privacy & Policy
                 </Link>
               </li>
               <li>
                 <Link
-                  to="#"
+                  to="contact"
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
                   Contact Us
