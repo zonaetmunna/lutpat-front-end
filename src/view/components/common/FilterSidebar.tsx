@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { IProduct } from "../../../types";
 import Select from "react-select";
 import ValueType from "react-select";
-import OptionTypeBase from "react-select";
 import Range from "rc-slider";
 import "rc-slider/assets/index.css";
 
@@ -12,17 +11,17 @@ interface FilterSidebarProps {
     priceRange: { min: number; max: number };
   };
   products: IProduct[];
-  onFilterChange: (newFilter: {
+  /* onFilterChange: (newFilter: {
     category?: string;
     priceRange?: { min?: number; max?: number };
-  }) => void;
+  }) => void; */
 }
 
 const FilterSidebar = ({
   filter,
   products,
-  onFilterChange,
-}: FilterSidebarProps) => {
+}: // onFilterChange,
+FilterSidebarProps) => {
   const categoryOptions = [
     { label: "All Categories", value: "" },
     { label: "Electronics", value: "electronics" },
@@ -32,12 +31,12 @@ const FilterSidebar = ({
   ];
 
   const handleCategoryChange = (selectedOption: ValueType) => {
-    onFilterChange({ category: (selectedOption as any)?.value });
+    // onFilterChange({ category: (selectedOption as any)?.value });
   };
 
   const handlePriceChange = (values: [number, number]) => {
     if (Array.isArray(values)) {
-      onFilterChange({ priceRange: { min: values[0], max: values[1] } });
+      // onFilterChange({ priceRange: { min: values[0], max: values[1] } });
     }
   };
 
@@ -61,7 +60,7 @@ const FilterSidebar = ({
               (option) => option.value === filter.category
             ) || categoryOptions[0]
           }
-          onChange={handleCategoryChange}
+          // onChange={handleCategoryChange}
           isSearchable={false}
         />
       </div>

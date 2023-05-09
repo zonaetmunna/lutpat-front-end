@@ -58,7 +58,7 @@ const Home = () => {
 
   return (
     <div className="container mx-auto bg-gray-100">
-      <div className="mt-10">
+      <div className="p-10">
         <Slider products={data?.data} />
       </div>
 
@@ -75,7 +75,7 @@ const Home = () => {
             <FilterSidebar
               filter={filter}
               products={combinedData}
-              onFilterChange={handleFilterChange}
+              // onFilterChange={handleFilterChange}
             />
           </div>
           <div className="col-span-4">
