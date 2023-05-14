@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetSingleStoreQuery } from "../../../../features/store/storeApi";
-import { useGetProductsQuery } from "../../../../features/product/productApi";
+import {
+  useGetProductsByShopQuery,
+  useGetProductsQuery,
+} from "../../../../features/product/productApi";
 import ProductCard from "../../../components/common/ProductCard";
 
 const ShopDetails = () => {
@@ -12,15 +15,24 @@ const ShopDetails = () => {
     isError: shopError,
   } = useGetSingleStoreQuery(id);
   const store = data?.data;
+  console.log(store);
 
-  const [categoryFilter, setCategoryFilter] = useState("");
   const {
     data: datas,
     isLoading: productLoading,
     isError: productError,
-  } = useGetProductsQuery();
-
+  } = useGetProductsByShopQuery(id);
   const products = datas?.data;
+  console.log(products);
+
+  const [categoryFilter, setCategoryFilter] = useState("");
+  /*  const {
+    data: datas,
+    isLoading: productLoading,
+    isError: productError,
+  } = useGetProductsQuery(); */
+
+  // const products = datas?.data;
 
   useEffect(() => {
     // Reset the category filter when the shop ID changes
@@ -40,25 +52,14 @@ const ShopDetails = () => {
 
   return (
     <div className="container mx-auto bg-gray-100">
-      <div>
-        <label htmlFor="category-select">Filter by category:</label>
-        <select
-          id="category-select"
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-        >
-          <option value="">All</option>
-          <option value="category1">Category 1</option>
-          <option value="category2">Category 2</option>
-          <option value="category3">Category 3</option>
-        </select>
-      </div>
       <div className="flex flex-col lg:flex-row">
         <div className="w-full lg:w-1/4 bg-white hidden sm:block overflow-y-auto">
           <div className="p-4 rounded-lg shadow-md">
             <h2 className="text-lg font-medium mb-4">Shop Information</h2>
+            <div className="flex items-center mb-4">
+              <img src={store?.image} alt="Logo" className="h-12 w-12 mr-2" />
+            </div>
             <div>
-              <p className="text-gray-600 font-medium">Name:</p>
               <p className="text-gray-900 font-medium">{store?.name ?? ""}</p>
             </div>
 

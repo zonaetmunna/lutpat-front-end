@@ -17,6 +17,8 @@ export const store = configureStore({
     // filter: filterSlice
 
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(apiSlice.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

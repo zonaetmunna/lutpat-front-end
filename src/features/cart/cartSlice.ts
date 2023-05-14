@@ -6,7 +6,10 @@ import { RootState } from "../../app/store";
 interface CartProduct {
     _id?: string;
     name: string;
-    category: string;
+    category: {
+        _id?: string;
+        name: string;
+    };
     description: string;
     image: string;
     price: number;

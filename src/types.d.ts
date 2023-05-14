@@ -2,11 +2,16 @@
 interface IProduct {
   _id?: string;
   name: string;
-  category: string;
+  category: {
+    _id?: string;
+    name: string;
+  };
   description: string;
   image: string;
   price: number;
   store: string;
+  createdAt?: string;
+  quantity?: number;
 };
 
 // auth login interface
@@ -65,4 +70,26 @@ export interface StoreDataForm {
   name: string;
   location: string;
   status: string;
+}
+
+
+// category
+export interface Category {
+  _id?: string;
+  name: string;
+  _v?: string;
+}
+
+export interface ResponseCategories {
+  error: boolean;
+  data: Store[];
+  message: string | null;
+  token: string | null;
+}
+
+export interface ResponseCategory {
+  error: boolean;
+  data: Category;
+  message: string | null;
+  token: string | null;
 }

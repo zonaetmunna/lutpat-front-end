@@ -14,11 +14,30 @@ interface ApiResponseSingle {
     error: boolean;
 }
 
+interface GetProductsQueryParams {
+    category?: string;
+}
+
 const productApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getProducts: builder.query<ApiResponseData, void>({
-            query: () => ({
-                url: "/products",
+        getProducts: builder.query<ApiResponseData, GetProductsQueryParams>({
+            query: (params) => {
+                const { category, ...restParams } = params || {};
+                const query = category ? { category } : {};
+
+                return {
+                    url: "/products",
+                    params: {
+                        ...query,
+                        ...restParams,
+                    },
+                };
+            },
+            providesTags: ["product"],
+        }),
+        getProductsByShop: builder.query<ApiResponseData, string>({
+            query: (id) => ({
+                url: `/products/get-shop-product/${id}`,
             }),
             providesTags: ["product"],
         }),
@@ -49,6 +68,7 @@ const productApi = apiSlice.injectEndpoints({
 
 export const {
     useGetProductsQuery,
+    useGetProductsByShopQuery,
     useGetSingleProductQuery,
     useAddProductMutation,
     useRemoveProductMutation,

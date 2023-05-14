@@ -4,57 +4,50 @@ import ProductCard from "../../../components/common/ProductCard";
 import { useGetProductsQuery } from "../../../../features/product/productApi";
 import Slider from "../../../components/main/home/Slider";
 import FilterSidebar from "../../../components/common/FilterSidebar";
-import { IProduct } from "../../../../types";
+import { Category, IProduct } from "../../../../types";
 import DeleveryOption from "../../../components/main/home/DeleveryOption";
+import { useGetCategoryQuery } from "../../../../features/category/categoryApi";
+import Select from "react-select";
 
-interface IFilter {
-  category: string;
-  priceRange: { min: number; max: number };
+interface ICategory {
+  label: string;
+  value: string;
 }
 
 const Home = () => {
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+    null
+  );
   // api data
-  const { data, error, isError, isLoading } = useGetProductsQuery();
-  const [filteredData, setFilteredData] = useState<IProduct[]>([]);
-  const [filter, setFilter] = useState<IFilter>({
-    category: "",
-    priceRange: { min: 0, max: 100 },
+  const { data, error, isError, isLoading } = useGetProductsQuery({
+    category: selectedCategory?.value,
   });
+  const products = data?.data;
+  // Filter products by selected category
+  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
 
-  const handleFilterChange = (newFilter: IFilter) => {
-    setFilter((prevFilter) => ({ ...prevFilter, ...newFilter }));
+  useEffect(() => {
+    if (products && selectedCategory) {
+      const filtered = products.filter(
+        (product) => product.category.name === selectedCategory.value
+      );
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredProducts(products || []);
+    }
+  }, [products, selectedCategory]);
+
+  const { data: datas } = useGetCategoryQuery();
+  const categories = datas?.data;
+  console.log(categories);
+  const categoryOptions = categories?.map((category: Category) => ({
+    label: category.name,
+    value: category.name!,
+  }));
+
+  const handleCategoryChange = (selected: ICategory | null) => {
+    setSelectedCategory(selected);
   };
-
-  const filteredProducts = useMemo(() => {
-    if (!data?.data) return [];
-    return data.data.filter((product) => {
-      const categoryMatch =
-        filter.category === "" || product.category === filter.category;
-      const priceMatch =
-        product.price >= filter.priceRange.min &&
-        product.price <= filter.priceRange.max;
-      return categoryMatch && priceMatch;
-    });
-  }, [data, filter]);
-
-  const combinedData = useMemo(() => {
-    if (!data?.data) return [];
-    if (!filteredProducts.length) return data.data;
-    const filteredIds = new Set(filteredProducts.map((product) => product._id));
-    return data.data
-      .filter((product) => !filteredIds.has(product._id))
-      .concat(filteredProducts);
-  }, [data, filteredProducts]);
-
-  // filter products based on category and price range
-  /* const filteredProducts = data?.data?.filter((product) => {
-    const categoryMatch =
-      filter.category === "" || product.category === filter.category;
-    const priceMatch =
-      product.price >= filter.priceRange.min &&
-      product.price <= filter.priceRange.max;
-    return categoryMatch && priceMatch;
-  }); */
 
   return (
     <div className="container mx-auto bg-gray-100">
@@ -72,15 +65,16 @@ const Home = () => {
         </h1>
         <div className="grid grid-cols-5 gap-4  ">
           <div className="col-span-1 ">
-            <FilterSidebar
-              filter={filter}
-              products={combinedData}
-              // onFilterChange={handleFilterChange}
+            {/* <FilterSidebar /> */}
+            <Select
+              options={categoryOptions}
+              value={selectedCategory}
+              onChange={handleCategoryChange}
             />
           </div>
           <div className="col-span-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2">
-              {combinedData.map((product) => (
+              {filteredProducts?.map((product) => (
                 <ProductCard product={product} key={product._id} />
               ))}
             </div>
