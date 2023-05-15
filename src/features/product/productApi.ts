@@ -1,4 +1,5 @@
-import { IProduct } from "../../types";
+import { Category, IProduct } from "../../types";
+import { ICategory } from "../../view/pages/main/home/Home";
 import apiSlice from "../api/apiSlice";
 
 // types
@@ -15,15 +16,19 @@ interface ApiResponseSingle {
 }
 
 interface GetProductsQueryParams {
-    category?: string;
+    category?: Category;
+    page?: number;
+    limit?: number;
 }
 
 const productApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getProducts: builder.query<ApiResponseData, GetProductsQueryParams>({
             query: (params) => {
+                console.log(params)
                 const { category, ...restParams } = params || {};
-                const query = category ? { category } : {};
+                const query = category ? { category: category } : {};
+                console.log(query)
 
                 return {
                     url: "/products",

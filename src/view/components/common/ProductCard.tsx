@@ -48,7 +48,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
             {product.description.slice(0, 5)}
           </p>
           <p className="mt-2 text-sm text-gray-500">{product.store}</p>
-          <p className="mt-2 text-sm text-gray-500">{product.category.name}</p>
+          <p className="mt-2 text-sm text-gray-500">{product.category}</p>
         </div>
         <div className="flex items-center justify-center my-5">
           <button

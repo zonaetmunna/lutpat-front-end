@@ -9,7 +9,7 @@ import DeleveryOption from "../../../components/main/home/DeleveryOption";
 import { useGetCategoryQuery } from "../../../../features/category/categoryApi";
 import Select from "react-select";
 
-interface ICategory {
+export interface ICategory {
   label: string;
   value: string;
 }
@@ -18,31 +18,32 @@ const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
     null
   );
+
   // api data
   const { data, error, isError, isLoading } = useGetProductsQuery({
     category: selectedCategory?.value,
   });
-  const products = data?.data;
-  // Filter products by selected category
-  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
 
-  useEffect(() => {
+  const products = data?.data;
+
+  // Filter products by selected category
+  const filteredProducts = useMemo(() => {
     if (products && selectedCategory) {
-      const filtered = products.filter(
-        (product) => product.category.name === selectedCategory.value
+      return products.filter(
+        (product) => product.category === selectedCategory.value
       );
-      setFilteredProducts(filtered);
     } else {
-      setFilteredProducts(products || []);
+      return products || [];
     }
   }, [products, selectedCategory]);
 
-  const { data: datas } = useGetCategoryQuery();
-  const categories = datas?.data;
+  const { data: categoryData } = useGetCategoryQuery();
+  const categories = categoryData?.data;
   console.log(categories);
+
   const categoryOptions = categories?.map((category: Category) => ({
     label: category.name,
-    value: category.name!,
+    value: category.name,
   }));
 
   const handleCategoryChange = (selected: ICategory | null) => {
@@ -63,9 +64,8 @@ const Home = () => {
         <h1 className="text-center text-3xl font-bold mb-4">
           Featured Products
         </h1>
-        <div className="grid grid-cols-5 gap-4  ">
-          <div className="col-span-1 ">
-            {/* <FilterSidebar /> */}
+        <div className="grid grid-cols-5 gap-4">
+          <div className="col-span-1">
             <Select
               options={categoryOptions}
               value={selectedCategory}
