@@ -47,7 +47,9 @@ const WishList = () => {
                     <td className="py-4">
                       <button
                         className="hover:text-red-600"
-                        onClick={() => handleRemove(item._id)}
+                        onClick={() =>
+                          item && item._id && handleRemove(item._id)
+                        }
                       >
                         <MdRemoveCircleOutline className="h-6 w-6 fill-current" />
                       </button>

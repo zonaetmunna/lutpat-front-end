@@ -80,21 +80,32 @@ const Cart = () => {
                       type="number"
                       className="w-16 border border-gray-400 rounded py-1 px-2"
                       value={item.quantity}
-                      onChange={(e) =>
-                        handleUpdateQuantity(
-                          item._id,
-                          parseInt(e.target.value, 10)
-                        )
-                      }
+                      onChange={(e) => {
+                        const itemId = item?._id;
+                        if (itemId) {
+                          handleUpdateQuantity(
+                            itemId,
+                            parseInt(e.target.value, 10)
+                          );
+                        }
+                      }}
                       min={1}
                       max={10}
                     />
                   </td>
-                  <td className="py-4">${item.price * item.quantity}</td>
+                  <td className="py-4">
+                    $
+                    {item &&
+                      item.price &&
+                      item.quantity &&
+                      `$${item.price * item.quantity}`}
+                  </td>
                   <td className="py-4">
                     <button
                       className="hover text-red-600"
-                      onClick={() => handleRemoveProductCart(item._id)}
+                      onClick={() =>
+                        item && item._id && handleRemoveProductCart(item._id)
+                      }
                     >
                       <MdRemoveCircleOutline className="h-6 w-6 fill-current" />
                     </button>
