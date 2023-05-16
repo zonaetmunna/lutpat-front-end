@@ -5,7 +5,7 @@ import {
   useGetProductsByShopQuery,
   useGetProductsQuery,
 } from "../../../../features/product/productApi";
-import ProductCard from "../../../components/common/ProductCard";
+import ProductCard from "../../../components/main/common/ProductCard";
 
 const ShopDetails = () => {
   const { id = "" } = useParams();

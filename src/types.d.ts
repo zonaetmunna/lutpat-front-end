@@ -1,3 +1,4 @@
+
 // product interface
 interface IProduct {
   _id?: string;
@@ -10,6 +11,7 @@ interface IProduct {
   createdAt?: string;
   quantity?: number;
 };
+
 
 // auth login interface
 export interface IAuthData {

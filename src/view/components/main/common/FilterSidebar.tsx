@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { IProduct } from "../../../types";
 import Select from "react-select";
 import ValueType from "react-select";
 import Range from "rc-slider";

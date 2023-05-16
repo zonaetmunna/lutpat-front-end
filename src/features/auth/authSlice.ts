@@ -1,13 +1,6 @@
-import { AsyncThunk, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import useAPI from "../../hooks/useApi";
-import authService from "../../services/auth.service";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IAuthData, LoginData, SignUpData } from "../../types";
-import productService from "../../services/product.service";
 import axios from "axios";
-import httpReq from "../../services/http.service";
-
-
-
 
 
 interface authInitState {
@@ -32,7 +25,7 @@ export const signupUser = createAsyncThunk<IAuthData, SignUpData>(
   async (SignUpData, { rejectWithValue }) => {
     try {
       // const response = await axios.post('/signup', userData);
-      const response = await axios.post('http://localhost:5001/api/auth/signup', SignUpData)
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/signup`, SignUpData)
       console.log(response.data.data)
       return response.data.data;
 
@@ -45,7 +38,7 @@ export const loginUser = createAsyncThunk<IAuthData, LoginData>(
   "auth/loginUser",
   async (LoginData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:5001/api/auth/login', LoginData);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/login`, LoginData);
       // const response = await httpReq.post('/auth/login', LoginData)
       console.log(response.data.data);
       return response.data.data;

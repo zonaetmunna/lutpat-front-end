@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 import { RootState } from "../app/store";
 
-const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
+const AdminPrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { pathname } = useLocation();
 
   const { user, isLoading } = useSelector((state: RootState) => state.auth);
@@ -12,11 +12,11 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
       return <Loading />;
     } */
 
-  if (!isLoading && !user?.email) {
+  if (!isLoading && (!user || user.role !== "admin" || !user.email)) {
     return <Navigate to="/login" state={{ path: pathname }} />;
   }
 
   return <>{children}</>;
 };
 
-export default PrivateRoute;
+export default AdminPrivateRoute;

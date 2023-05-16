@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import ProductCard from "../../../components/common/ProductCard";
+import ProductCard from "../../../components/main/common/ProductCard";
 import { useGetProductsQuery } from "../../../../features/product/productApi";
 import Slider from "../../../components/main/home/Slider";
 import { Category, IProduct } from "../../../../types";

@@ -11,7 +11,7 @@ import {
 } from "../../../../features/cart/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { IProduct } from "../../../../types";
-import ShippingOption from "../../../components/ShippingOption/ShippingOption";
+import ShippingOption from "../../../components/main/ShippingOption/ShippingOption";
 
 const Cart = () => {
   const { cart, subtotal, discountCode, total, shippingOption, shippingCost } =

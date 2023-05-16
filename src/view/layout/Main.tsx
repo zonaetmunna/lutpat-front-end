@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Header from "../components/common/Header";
-import Footer from "../components/common/Footer";
+import Header from "../components/main/common/Header";
+import Footer from "../components/main/common/Footer";
 import Chatbot from "../components/common/Chatboat/Chatbot";
 
 const Main = () => {

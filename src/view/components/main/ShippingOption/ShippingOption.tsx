@@ -4,8 +4,8 @@ import {
   setShippingCost,
   setShippingOption,
   setTotal,
-} from "../../../features/cart/cartSlice";
-import { AppDispatch } from "../../../app/store";
+} from "../../../../features/cart/cartSlice";
+import { AppDispatch } from "../../../../app/store";
 
 const ShippingOption = ({ shippingCost }: { shippingCost: number }) => {
   const dispatch = useDispatch<AppDispatch>();

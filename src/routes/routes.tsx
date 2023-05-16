@@ -2,13 +2,11 @@ import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import Error from "../view/layout/Error";
-import Dashboard from "../view/layout/Dashboard";
+import AdminDashboard from "../view/layout/AdminDashboard";
 import AllProduct from "../view/pages/dashboard/products/AllProduct";
-import MakeAdmin from "../view/pages/dashboard/adminDashboard/MakeAdmin";
+import MakeAdmin from "../view/pages/dashboard/makeAdmin/MakeAdmin";
 import AddProduct from "../view/pages/dashboard/products/AddProduct";
-import AdminDashboard from "../view/pages/dashboard/adminDashboard/AdminDashboard";
-import UserDashboard from "../view/pages/dashboard/userDashboard/UserDashboard";
-import MarchentDashboard from "../view/pages/dashboard/marchentDashboard/MarchentDashboard";
+
 import VendorProfile from "../view/pages/dashboard/vendors/VendorProfile";
 import CustomerList from "../view/pages/dashboard/customers/CustomerList";
 import SingleCustomer from "../view/pages/dashboard/customers/SingleCustomer";
@@ -20,13 +18,18 @@ import Message from "../view/pages/dashboard/message/Message";
 import DashboardDefault from "../view/pages/dashboard/dashboardDefault/DashboardDefault";
 import ShopList from "../view/pages/dashboard/shop/ShopList";
 import SingleShop from "../view/pages/dashboard/shop/SingleShop";
-import PrivateRoute from "./PrivateRoute";
 import Shop from "../view/pages/main/shop/Shop";
 import ShopDetails from "../view/pages/main/shop/ShopDetails";
 import SellerRegistration from "../view/pages/main/account/SellerRegistration";
 import Offer from "../view/pages/main/offer/Offer";
 import Faq from "../view/pages/main/faq/Faq";
 import Settings from "../view/pages/dashboard/settings/Settings";
+import UserProfile from "../view/pages/main/userProfile/UserProfile";
+import SellerPrivateRoute from "./SellerPrivateRoute";
+import SellerDashboard from "../view/layout/SellerDashboard";
+import AdminPrivateRoute from "./AdminPrivateRoute";
+import UserPrivateRoute from "./UserPrivateRoute";
+import SellerDashboardDefault from "../view/pages/sellerDashboard/sellerDashboardDefault/SellerDashboardDefault";
 const Main = React.lazy(() => import("../view/layout/Main"));
 const Home = React.lazy(() => import("../view/pages/main/home/Home"));
 const SingleProduct = React.lazy(
@@ -121,19 +124,28 @@ export const routes = createBrowserRouter([
         path: "TermCondition",
         element: <TermCondition />,
       },
+      {
+        path: "profile",
+        element: (
+          <UserPrivateRoute>
+            <UserProfile />
+          </UserPrivateRoute>
+        ),
+      },
     ],
   },
+  // admin dashboard layout
   {
-    path: "/dashboard",
+    path: "/admin-dashboard",
     element: (
-      <PrivateRoute>
-        <Dashboard />
-      </PrivateRoute>
+      <AdminPrivateRoute>
+        <AdminDashboard />
+      </AdminPrivateRoute>
     ),
     errorElement: <Error />,
     children: [
       {
-        path: "/dashboard",
+        path: "/admin-dashboard",
         element: <DashboardDefault />,
       },
       {
@@ -148,18 +160,7 @@ export const routes = createBrowserRouter([
         path: "product-add",
         element: <AddProduct />,
       },
-      {
-        path: "admin-dashboard",
-        element: <AdminDashboard />,
-      },
-      {
-        path: "merchant-dashboard",
-        element: <MarchentDashboard />,
-      },
-      {
-        path: "user-dashboard",
-        element: <UserDashboard />,
-      },
+
       {
         path: "shop-list",
         element: <ShopList />,
@@ -203,6 +204,22 @@ export const routes = createBrowserRouter([
       {
         path: "settings",
         element: <Settings />,
+      },
+    ],
+  },
+  // seller dashboard
+  {
+    path: "/seller-dashboard",
+    element: (
+      <SellerPrivateRoute>
+        <SellerDashboard />
+      </SellerPrivateRoute>
+    ),
+    errorElement: <Error />,
+    children: [
+      {
+        path: "/seller-dashboard",
+        element: <SellerDashboardDefault />,
       },
     ],
   },

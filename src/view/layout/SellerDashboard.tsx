@@ -1,17 +1,17 @@
 import React from "react";
+import NavbarSeller from "../components/sellerDashboard/nav/NavbarSeller";
+import SellerDashboardSidebar from "../components/sellerDashboard/sidebar/SellerDashboardSidebar";
 import { Outlet } from "react-router-dom";
-import DashboardSidebar from "../components/dashboard/sidebar/DashboardSidebar";
-import DashboardNavbar from "../components/dashboard/navbar/DashboardNavbar";
 
-const Dashboard = () => {
+const SellerDashboard = () => {
   return (
     <div className="">
       {/* Navbar */}
-      <DashboardNavbar />
+      <NavbarSeller />
 
       <div className="flex flex-grow">
         {/* Sidebar */}
-        <DashboardSidebar />
+        <SellerDashboardSidebar />
 
         {/* Content */}
         <main className="flex-grow bg-gray-100 p-6">
@@ -24,4 +24,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default SellerDashboard;
