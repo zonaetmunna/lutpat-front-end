@@ -30,6 +30,15 @@ import SellerDashboard from "../view/layout/SellerDashboard";
 import AdminPrivateRoute from "./AdminPrivateRoute";
 import UserPrivateRoute from "./UserPrivateRoute";
 import SellerDashboardDefault from "../view/pages/sellerDashboard/sellerDashboardDefault/SellerDashboardDefault";
+import UserProfileManage from "../view/pages/main/userProfile/UserProfileManage";
+import UserChangePassword from "../view/pages/main/userProfile/UserChangePassword";
+import UserOrders from "../view/pages/main/userProfile/UserOrders";
+import UserDownload from "../view/pages/main/userProfile/UserDownload";
+import UserWishlist from "../view/pages/main/userProfile/UserWishlist";
+import UserQuestion from "../view/pages/main/userProfile/UserQuestion";
+import UserRefunds from "../view/pages/main/userProfile/UserRefunds";
+import UserReports from "../view/pages/main/userProfile/UserReports";
+import UserCards from "../view/pages/main/userProfile/UserCards";
 const Main = React.lazy(() => import("../view/layout/Main"));
 const Home = React.lazy(() => import("../view/pages/main/home/Home"));
 const SingleProduct = React.lazy(
@@ -131,6 +140,44 @@ export const routes = createBrowserRouter([
             <UserProfile />
           </UserPrivateRoute>
         ),
+        children: [
+          {
+            path: "profile",
+            element: <UserProfileManage />,
+          },
+          {
+            path: "change-password",
+            element: <UserChangePassword />,
+          },
+          {
+            path: "my-orders",
+            element: <UserOrders />,
+          },
+          {
+            path: "download",
+            element: <UserDownload />,
+          },
+          {
+            path: "my-wishlists",
+            element: <UserWishlist />,
+          },
+          {
+            path: "my-question",
+            element: <UserQuestion />,
+          },
+          {
+            path: "my-refunds",
+            element: <UserRefunds />,
+          },
+          {
+            path: "my-reports",
+            element: <UserReports />,
+          },
+          {
+            path: "my-cards",
+            element: <UserCards />,
+          },
+        ],
       },
     ],
   },
