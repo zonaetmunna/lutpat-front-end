@@ -18,85 +18,53 @@ const Header = () => {
     dispatch(logOut());
   };
 
-  const options = [
-    { value: "all", label: "All" },
-    { value: "books", label: "Books" },
-    { value: "electronics", label: "Electronics" },
-    { value: "fashion", label: "Fashion" },
-    { value: "sports", label: "Sports" },
-  ];
-
   return (
     <div className="py-3 px-3 bg-stone-50 border-b border-white-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          {/* logo link */}
+          {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
             <Link to="/">
               <img src={logo} alt="" className="h-8 w-auto " />
             </Link>
           </div>
-          {/* search input filed */}
+          {/* Search Input and Navigation Links */}
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <div>
-              <Select options={options} className="w-48 mr-2" />
-            </div>
-            <div className="mx-2 rounded-full font-bold">
-              <Link to="/shop">
-                <p className="text-yellow-500">Shop</p>
-              </Link>
-            </div>
-            <div className="mx-2 rounded-full font-bold">
-              <Link to="/Offer">
-                <p className="text-yellow-500">Offer</p>
-              </Link>
-            </div>
-            <div className="mx-2 rounded-full font-bold">
-              <Link to="/faq">
-                <p className="text-yellow-500">Faq</p>
-              </Link>
-            </div>
-            <div className="mx-2 rounded-full font-bold">
-              <Link to="/contact">
-                <p className="text-yellow-500">Contact</p>
-              </Link>
-            </div>
+            <Link to="/shop" className="mx-2 font-bold text-yellow-500">
+              Shop
+            </Link>
+            <Link to="/offer" className="mx-2 font-bold text-yellow-500">
+              Offer
+            </Link>
+            <Link to="/faq" className="mx-2 font-bold text-yellow-500">
+              Faq
+            </Link>
+            <Link to="/contact" className="mx-2 font-bold text-yellow-500">
+              Contact
+            </Link>
           </div>
+          {/* User Actions */}
           <div className="flex justify-around items-center">
-            {/* wishlist */}
-            <div className="mx-2 rounded-full font-bold">
-              <Link to="/wishlist">
-                <span>
-                  <BsHeart size={20} className="text-yellow-500" />
-                </span>
-              </Link>
-            </div>
-            {/* cart */}
-            <div className="mx-2">
-              <Link to="/cart">
-                <span>
-                  <BsCart3 size={20} className="text-yellow-500" />
-                </span>
-              </Link>
-            </div>
-            {/* dashboard link */}
-            {user && (
-              <div className="mx-2">
-                <Link to="/dashboard">Dashboard</Link>
-              </div>
-            )}
+            <Link to="/wishlist" className="mx-2">
+              <BsHeart size={20} className="text-yellow-500" />
+            </Link>
+
+            <Link to="/cart" className="mx-2">
+              <BsCart3 size={20} className="text-yellow-500" />
+            </Link>
             {user ? (
-              <div className="mx-3">
-                <button onClick={handleLogOut}>
-                  <span>
-                    <VscAccount size={20} />
-                  </span>
+              <>
+                <Link to="/dashboard" className="mx-2">
+                  Dashboard
+                </Link>
+                <button onClick={handleLogOut} className="mx-2">
+                  <VscAccount size={20} />
                 </button>
-              </div>
+              </>
             ) : (
-              <div className="mx-3">
-                <Link to="/login">Login</Link>
-              </div>
+              <Link to="/login" className="mx-2">
+                Login
+              </Link>
             )}
             <Link
               to="/seller-registration"

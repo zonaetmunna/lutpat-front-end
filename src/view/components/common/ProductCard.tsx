@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IProduct } from "../../../types";
 import { useDispatch } from "react-redux";
-import { addToWishlist } from "../../../features/wishList/wishlistSlice";
-import { addItem } from "../../../features/cart/cartSlice";
 import { BiHeart, BiShoppingBag } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import { RiArrowDropUpLine, RiArrowDropDownLine } from "react-icons/ri";
+import { addToCart } from "../../../features/cart/cartSlice";
+import { addToWishlist } from "../../../features/wishList/wishlistSlice";
 
 const ProductCard = ({ product }: { product: IProduct }) => {
   // product destructuring
@@ -26,7 +26,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
 
   const handleAddProductCart = (product: IProduct) => {
     console.log(product);
-    dispatch(addItem({ ...product, quantity }));
+    dispatch(addToCart({ ...product, quantity }));
   };
   const handleAddToWishlist = (product: IProduct) => {
     console.log(product);

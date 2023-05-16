@@ -12,12 +12,15 @@ import {
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
   FaTimesCircle,
+  FaTrash,
+  FaEdit,
 } from "react-icons/fa";
 import { ICategory } from "../../main/home/Home";
 import { useGetCategoryQuery } from "../../../../features/category/categoryApi";
 import UpdateProduct from "../../../components/dashboard/product/UpdateProduct";
 import DeleteProduct from "../../../components/dashboard/product/DeleteProduct";
 import ViewProduct from "../../../components/dashboard/product/ViewProduct";
+import { BsEye } from "react-icons/bs";
 
 const AllProduct = () => {
   const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
@@ -216,19 +219,19 @@ const AllProduct = () => {
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
                   onClick={() => handleProductClick(product)}
                 >
-                  View
+                  <BsEye />
                 </button>
                 <button
                   className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2"
                   onClick={() => handleUpdateClick(product)}
                 >
-                  Edit
+                  <FaEdit />
                 </button>
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                   onClick={() => handleDeleteClick(product)}
                 >
-                  Delete
+                  <FaTrash />
                 </button>
               </td>
             </tr>

@@ -3,7 +3,7 @@ import { IProduct } from "../../types";
 import { RootState } from "../../app/store";
 
 
-interface CartProduct {
+/* interface CartProduct {
     _id?: string;
     name: string;
     category: string;
@@ -12,56 +12,132 @@ interface CartProduct {
     price: number;
     store: string;
     quantity: number;
-}
+} */
 
 interface ICartState {
-    items: CartProduct[];
+    cart: IProduct[];
+    shippingOption: string;
+    shippingCost: number;
+    discountCode: string;
+    subtotal: number;
+    total: number;
 }
 
 
 const initialState: ICartState = {
-    items: [],
+    cart: [],
+    shippingOption: "",
+    shippingCost: 0,
+    discountCode: "",
+    subtotal: 0,
+    total: 0,
 };
 
 export const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addItem: (state, action: PayloadAction<CartProduct>) => {
-            const itemIndex = state.items.findIndex(
-                (item) => item._id === action.payload._id
+        addToCart: (state, action: PayloadAction<IProduct>) => {
+            const selectedProduct = state.cart.find(
+                (product) => product._id === action.payload._id
             );
-
-            if (itemIndex >= 0) {
-                // If the item is already in the cart, increase the quantity
-                state.items[itemIndex].quantity += action.payload.quantity;
+            if (!selectedProduct) {
+                const product = { ...action.payload, quantity: 1 };
+                state.cart.push(product);
             } else {
-                // Otherwise, add the item to the cart
-                state.items.push(action.payload);
+                if (selectedProduct.quantity) {
+                    selectedProduct.quantity += 1;
+                } else {
+                    selectedProduct.quantity = 1;
+                }
+                state.cart = state.cart.map((product) =>
+                    product._id === selectedProduct._id ? selectedProduct : product
+                );
+            }
+            state.subtotal = state.cart.reduce(
+                (acc, curr) => acc + (curr.price * (curr.quantity || 0)),
+                0
+            );
+        },
+        removeFromCart: (state, action: PayloadAction<string>) => {
+            const id = action.payload;
+            const existingItemIndex = state.cart.findIndex((item) => item._id === id);
+            if (existingItemIndex !== -1) {
+                const item = state.cart[existingItemIndex];
+                if (item.quantity && item.quantity === 1) {
+                    state.cart.splice(existingItemIndex, 1);
+                } else if (item.quantity) {
+                    item.quantity--;
+                }
+                state.subtotal = state.cart.reduce(
+                    (acc, curr) => acc + (curr.price * (curr.quantity || 0)),
+                    0
+                );
             }
         },
-        removeItem: (state, action: PayloadAction<string>) => {
-            state.items = state.items.filter((item) => item._id !== action.payload);
-        },
-        updateItemQuantity: (state, action: PayloadAction<{ id: string; quantity: number }>) => {
-            const itemIndex = state.items.findIndex(
-                (item) => item._id === action.payload.id
-            );
 
-            if (itemIndex >= 0) {
-                state.items[itemIndex].quantity = action.payload.quantity;
+        updateQuantity: (state, action: PayloadAction<{ id: string; quantity: number }>) => {
+            const { id, quantity } = action.payload;
+            const selectedProduct = state.cart.find((product) => product._id === id);
+            if (selectedProduct) {
+                selectedProduct.quantity = quantity;
+                state.cart = state.cart.map((product) =>
+                    product._id === selectedProduct._id ? selectedProduct : product
+                );
+                state.subtotal = state.cart.reduce(
+                    (acc, curr) => acc + (curr.price * (curr.quantity || 0)),
+                    0
+                );
             }
         },
         clearCart: (state) => {
-            state.items = [];
+            state.cart = [];
+            state.shippingOption = "";
+            state.shippingCost = 0;
+            state.discountCode = "";
+            state.subtotal = 0;
+            state.total = 0;
+        },
+        setShippingOption: (state, action: PayloadAction<string>) => {
+            state.shippingOption = action.payload;
+        },
+        setShippingCost: (state, action: PayloadAction<number>) => {
+            state.shippingCost = action.payload;
+        },
+        setDiscountCode: (state, action: PayloadAction<string>) => {
+            state.discountCode = action.payload;
+        },
+        setSubtotal: (state) => {
+            state.subtotal = state.cart.reduce(
+                (acc, curr) => acc + (curr.price * (curr.quantity || 0)),
+                0
+            );
+        },
+        setTotal: (state) => {
+            state.total = state.subtotal + state.shippingCost;
+            if (state.discountCode === "EXAMPLE10") {
+                state.total *= 0.9;
+            }
+        },
+        applyDiscountCode: (state, action) => {
+            const { discountCode } = action.payload;
+            if (discountCode === "EXAMPLE10") {
+                state.discountCode = discountCode;
+                state.total *= 0.9;
+            }
         },
     },
 });
 
-export const { addItem, removeItem, updateItemQuantity, clearCart } = cartSlice.actions;
-export const selectCartItems = (state: RootState) => state.cart.items;
-
-export const selectCartTotal = (state: RootState) =>
-    state.cart.items.reduce((total, item) => total + item.price * item.quantity, 0);
+export const { addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    setShippingOption,
+    setShippingCost,
+    setDiscountCode,
+    setSubtotal,
+    setTotal,
+    applyDiscountCode, } = cartSlice.actions;
 
 export default cartSlice.reducer;

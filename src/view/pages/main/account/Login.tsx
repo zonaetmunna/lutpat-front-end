@@ -7,7 +7,12 @@ import { LoginData } from "../../../../types";
 import { AppDispatch, RootState } from "../../../../app/store";
 
 const Login = () => {
-  const { register, handleSubmit, reset } = useForm<LoginData>();
+  const { register, handleSubmit, reset } = useForm<LoginData>({
+    defaultValues: {
+      email: "name@gmail.com",
+      password: "123456789",
+    },
+  });
   const { user, isLoading, error, isError } = useSelector(
     (state: RootState) => state.auth
   );

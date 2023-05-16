@@ -1,18 +1,48 @@
-import React from "react";
-import { RootState } from "../../../../app/store";
+import React, { useEffect } from "react";
+import { AppDispatch, RootState } from "../../../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { MdRemoveCircleOutline } from "react-icons/md";
-import { removeItem } from "../../../../features/cart/cartSlice";
+import {
+  applyDiscountCode,
+  removeFromCart,
+  setDiscountCode,
+  setTotal,
+  updateQuantity,
+} from "../../../../features/cart/cartSlice";
+import { useNavigate } from "react-router-dom";
+import { IProduct } from "../../../../types";
+import ShippingOption from "../../../components/ShippingOption/ShippingOption";
 
 const Cart = () => {
-  const dispatch = useDispatch();
-  const cart = useSelector((state: RootState) => state.cart.items);
+  const { cart, subtotal, discountCode, total, shippingOption, shippingCost } =
+    useSelector((state: RootState) => state.cart);
+  console.log(cart.length);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
-  const handleRemoveItem = (id: string) => {
-    dispatch(removeItem(id));
+  // remove product from cart
+  const handleRemoveProductCart = (id: string) => {
+    dispatch(removeFromCart(id));
   };
 
-  const subtotal = cart.reduce((acc, curr) => acc + curr.price, 0);
+  const handleUpdateQuantity = (id: string, quantity: number) => {
+    dispatch(updateQuantity({ id, quantity }));
+  };
+
+  const handleApplyDiscount = () => {
+    const couponInput = document.getElementById(
+      "coupon"
+    ) as HTMLInputElement | null;
+    const discountCode = couponInput?.value;
+
+    if (discountCode) {
+      dispatch(applyDiscountCode(discountCode));
+    }
+  };
+
+  useEffect(() => {
+    dispatch(setTotal());
+  }, [subtotal, shippingCost, discountCode, dispatch]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -30,7 +60,7 @@ const Cart = () => {
               </tr>
             </thead>
             <tbody>
-              {cart.map((item) => (
+              {cart.map((item: IProduct) => (
                 <tr key={item._id} className="border-b border-gray-400">
                   <td className="py-4">
                     <div className="flex items-center">
@@ -41,7 +71,6 @@ const Cart = () => {
                       />
                       <div className="ml-4">
                         <h2 className="font-bold text-lg">{item.name}</h2>
-                        <p className="text-gray-600">{item.description}</p>
                       </div>
                     </div>
                   </td>
@@ -51,7 +80,12 @@ const Cart = () => {
                       type="number"
                       className="w-16 border border-gray-400 rounded py-1 px-2"
                       value={item.quantity}
-                      onChange={() => {}}
+                      onChange={(e) =>
+                        handleUpdateQuantity(
+                          item._id,
+                          parseInt(e.target.value, 10)
+                        )
+                      }
                       min={1}
                       max={10}
                     />
@@ -59,8 +93,8 @@ const Cart = () => {
                   <td className="py-4">${item.price * item.quantity}</td>
                   <td className="py-4">
                     <button
-                      className="hover:text-red-600"
-                      onClick={() => handleRemoveItem(item._id ?? "")}
+                      className="hover text-red-600"
+                      onClick={() => handleRemoveProductCart(item._id)}
                     >
                       <MdRemoveCircleOutline className="h-6 w-6 fill-current" />
                     </button>
@@ -69,10 +103,42 @@ const Cart = () => {
               ))}
             </tbody>
           </table>
-          <div className="flex justify-end mt-8">
+          <div className="flex justify-between mt-8">
             <div className="flex items-center">
               <span className="text-lg font-bold">Subtotal:</span>
               <span className="text-lg font-bold ml-2">${subtotal}</span>
+            </div>
+            <div className="flex-shrink-0 bg-gray-100 p-5">
+              <ShippingOption shippingCost={shippingCost} />
+              <div className="flex flex-row justify-between items-center w-full my-4">
+                <label htmlFor="coupon" className="font-bold mr-2">
+                  Coupon Code:
+                </label>
+                <input
+                  type="text"
+                  name="coupon"
+                  id="coupon"
+                  className="border rounded py-2 px-3"
+                  value={discountCode}
+                  onChange={(e) => dispatch(setDiscountCode(e.target.value))}
+                />
+                <button
+                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 ml-2"
+                  onClick={handleApplyDiscount}
+                >
+                  Apply
+                </button>
+              </div>
+              <div className="flex justify-between items-center my-5">
+                <span className="text-lg font-bold">Total:</span>
+                <span className="text-lg font-bold">${total}</span>
+              </div>
+              <button
+                className="bg-blue-500 text-white py-2 px-4 my-5 rounded hover:bg-blue-600"
+                onClick={() => navigate("/checkout")}
+              >
+                Checkout
+              </button>
             </div>
           </div>
         </>

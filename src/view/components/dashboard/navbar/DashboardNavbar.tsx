@@ -136,12 +136,7 @@ const DashboardNavbar = () => {
           <div className="flex">
             {/* dashboard logo */}
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                alt="Workflow"
-              />
-              <span className="font-semibold text-xl ml-2">Dashboard</span>
+              <span className="font-semibold text-xl">Dashboard</span>
             </Link>
           </div>
           {/*  */}
@@ -169,7 +164,7 @@ const DashboardNavbar = () => {
             <div className="relative pl-3">
               <div className="relative">
                 <motion.button
-                  className=" hover:text-gray-300 "
+                  className="hover:text-gray-300"
                   onClick={() => setShowMessages(!showMessages)}
                   variants={iconVariants}
                   animate={showMessages ? "open" : "closed"}
@@ -212,7 +207,7 @@ const DashboardNavbar = () => {
             {/* notification */}
             <div className="relative pl-3">
               <button
-                className=" p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                className="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 onClick={handleNotifications}
               >
                 <FaBell className="w-6 h-6" />

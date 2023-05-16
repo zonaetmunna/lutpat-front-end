@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import { useGetSingleProductQuery } from "../../../../features/product/productApi";
 import { useDispatch } from "react-redux";
 import { IProduct } from "../../../../types";
-import { addItem } from "../../../../features/cart/cartSlice";
-import { addToWishlist } from "../../../../features/wishList/wishlistSlice";
 import { BiHeart, BiShoppingBag } from "react-icons/bi";
+import { addToCart } from "../../../../features/cart/cartSlice";
+import { addToWishlist } from "../../../../features/wishList/wishlistSlice";
 
 const SingleProduct = () => {
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ const SingleProduct = () => {
   const product = data?.data;
 
   const handleAddToCart = (data: IProduct) => {
-    dispatch(addItem({ ...data, quantity }));
+    dispatch(addToCart({ ...data, quantity }));
   };
 
   const handleAddToWishlist = (product: IProduct) => {

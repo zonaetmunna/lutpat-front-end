@@ -5,13 +5,20 @@ import DashboardNavbar from "../components/dashboard/navbar/DashboardNavbar";
 
 const Dashboard = () => {
   return (
-    <div>
+    <div className="">
+      {/* Navbar */}
       <DashboardNavbar />
-      <div className="flex">
+
+      <div className="flex flex-grow">
+        {/* Sidebar */}
         <DashboardSidebar />
-        <div className="flex-grow bg-gray-100 p-6">
-          <Outlet />
-        </div>
+
+        {/* Content */}
+        <main className="flex-grow bg-gray-100 p-6">
+          <div className="container mx-auto">
+            <Outlet />
+          </div>
+        </main>
       </div>
     </div>
   );
