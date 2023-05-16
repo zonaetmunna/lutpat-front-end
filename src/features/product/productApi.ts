@@ -16,7 +16,8 @@ interface ApiResponseSingle {
 }
 
 interface GetProductsQueryParams {
-    category?: Category;
+    category?: Category | string;
+    search?: string;
     page?: number;
     limit?: number;
 }
@@ -25,10 +26,24 @@ const productApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getProducts: builder.query<ApiResponseData, GetProductsQueryParams>({
             query: (params) => {
-                console.log(params)
-                const { category, ...restParams } = params || {};
-                const query = category ? { category: category } : {};
-                console.log(query)
+                console.log(params);
+                const { category, search, page, limit, ...restParams } = params || {};
+                const query: GetProductsQueryParams = {};
+
+                if (category) {
+                    query.category = category;
+                }
+
+                if (search) {
+                    query.search = search;
+                }
+
+                if (page && limit) {
+                    query.page = page;
+                    query.limit = limit;
+                }
+
+                console.log(query);
 
                 return {
                     url: "/products",
@@ -40,6 +55,7 @@ const productApi = apiSlice.injectEndpoints({
             },
             providesTags: ["product"],
         }),
+
         getProductsByShop: builder.query<ApiResponseData, string>({
             query: (id) => ({
                 url: `/products/get-shop-product/${id}`,
@@ -60,6 +76,14 @@ const productApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["product"],
         }),
+        updateProduct: builder.mutation({
+            query: (product) => ({
+                url: `/product/${product._id}`,
+                method: "PUT",
+                body: product,
+            }),
+            invalidatesTags: ["product"],
+        }),
         removeProduct: builder.mutation({
             query: (id) => ({
                 url: `/products/${id}`,
@@ -76,5 +100,6 @@ export const {
     useGetProductsByShopQuery,
     useGetSingleProductQuery,
     useAddProductMutation,
+    useUpdateProductMutation,
     useRemoveProductMutation,
 } = productApi;

@@ -1,22 +1,21 @@
 import React from "react";
+import { FaTruck, FaMoneyBill, FaGift } from "react-icons/fa";
 
-type DeliveryOption = {
-  name: string;
-  image: string;
-};
-
-const deliveryOptions: DeliveryOption[] = [
+const deliveryOptions = [
   {
     name: "Express Delivery",
-    image: "/images/express-delivery.svg",
+    icon: FaTruck,
+    color: "bg-blue-500",
   },
   {
     name: "Cash on Delivery",
-    image: "/images/cash-on-delivery.svg",
+    icon: FaMoneyBill,
+    color: "bg-purple-500",
   },
   {
     name: "Gift Voucher",
-    image: "/images/gift-voucher.svg",
+    icon: FaGift,
+    color: "bg-red-500",
   },
 ];
 
@@ -26,10 +25,10 @@ const DeleveryOption = () => {
       {deliveryOptions.map((option) => (
         <div
           key={option.name}
-          className="w-64 border rounded-lg p-4 mr-6 bg-gray-100"
+          className={`w-64 border rounded-lg p-4 mr-6 ${option.color} text-white flex items-center`}
         >
-          <img src={option.image} alt={option.name} className="h-8 w-8 mr-2" />
-          <div className="text-lg font-medium text-gray-700">{option.name}</div>
+          <option.icon className="text-4xl mr-4" />
+          <div className="text-xl font-medium">{option.name}</div>
         </div>
       ))}
     </div>

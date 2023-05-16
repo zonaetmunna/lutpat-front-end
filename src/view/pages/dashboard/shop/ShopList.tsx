@@ -103,7 +103,7 @@ const ShopList = () => {
 
   return (
     <div className="container mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Brand List</h1>
+      <h1 className="text-2xl font-bold mb-4">Shop List</h1>
       {/* input and button section */}
       <div className="flex justify-between items-center my-5">
         {/* input field */}
@@ -190,7 +190,7 @@ const ShopList = () => {
       />
       {/* view modal */}
       {/* future update */}
-      {/*  {isSingleBrandModalOpen && (
+      {/* {isSingleBrandModalOpen && (
         <SingleShop
           onClose={() => setIsSingleBrandModalOpen(false)}
           brand={selectedBrand}

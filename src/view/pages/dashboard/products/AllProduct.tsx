@@ -1,43 +1,152 @@
-import React, { useState } from "react";
-import { useGetProductsQuery } from "../../../../features/product/productApi";
-import { IProduct } from "../../../../types";
-import { useDispatch } from "react-redux";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useMemo, useState } from "react";
+import {
+  useGetProductsQuery,
+  useRemoveProductMutation,
+  useUpdateProductMutation,
+} from "../../../../features/product/productApi";
+import { Category, IProduct } from "../../../../types";
+import Select from "react-select";
 import {
   FaChevronLeft,
   FaChevronRight,
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
+  FaTimesCircle,
 } from "react-icons/fa";
+import { ICategory } from "../../main/home/Home";
+import { useGetCategoryQuery } from "../../../../features/category/categoryApi";
+import UpdateProduct from "../../../components/dashboard/product/UpdateProduct";
+import DeleteProduct from "../../../components/dashboard/product/DeleteProduct";
+import ViewProduct from "../../../components/dashboard/product/ViewProduct";
 
 const AllProduct = () => {
-  const { data, isLoading, isError, error } = useGetProductsQuery();
-
-  const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(5);
-
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = data?.data?.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+    null
   );
+  const [searchText, setSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const totalPages = Math.ceil(data?.data?.length ?? 0 / productsPerPage);
+  // api data
+  const { data, error, isError, isLoading } = useGetProductsQuery({
+    category: selectedCategory?.value,
 
-  const navigate = useNavigate();
+    search: searchText,
+    page: currentPage,
+    limit: itemsPerPage,
+  });
 
-  const handlePageChange = (newPage: number) => {
-    // onPageChange(newPage);
-    navigate(`?page=${newPage}`);
+  const products = data?.data;
+
+  // Filter products by selected category
+  const filteredProducts = useMemo(() => {
+    if (products && selectedCategory) {
+      return products.filter(
+        (product: IProduct) => product.category === selectedCategory.value
+      );
+    } else {
+      return products || [];
+    }
+  }, [products, selectedCategory]);
+
+  const { data: categoryData } = useGetCategoryQuery();
+  const categories = categoryData?.data;
+  console.log(categories);
+
+  const categoryOptions = categories?.map((category: Category) => ({
+    label: category.name,
+    value: category.name,
+  }));
+
+  const handleCategoryChange = (selected: ICategory | null) => {
+    setSelectedCategory(selected);
+    setCurrentPage(1);
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const visibleProducts = filteredProducts?.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const totalPages = Math.ceil(filteredProducts?.length / itemsPerPage);
+
+  /* handle update and delete */
+  const [updateProduct] = useUpdateProductMutation();
+  const [deleteProduct] = useRemoveProductMutation();
+
+  const [slectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+  const [isSingleBrandModalOpen, setIsSingleBrandModalOpen] =
+    useState<boolean>(false);
+  const [isUpdateProductModalOpen, setIsUpdateProductModalOpen] =
+    useState<boolean>(false);
+  const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
+    useState<boolean>(false);
+
+  const handleUpdateProduct = (product: IProduct) => {
+    updateProduct(product);
+  };
+
+  const handleDeleteProduct = (id: string) => {
+    deleteProduct(id);
+  };
+
+  const handleProductClick = (product: IProduct) => {
+    setSelectedProduct(product);
+    setIsSingleBrandModalOpen(true);
+  };
+
+  const handleUpdateClick = (product: IProduct) => {
+    setSelectedProduct(product);
+    setIsUpdateProductModalOpen(true);
+  };
+
+  const handleDeleteClick = (product: IProduct) => {
+    setSelectedProduct(product);
+    setIsDeleteProductModalOpen(true);
   };
 
   return (
     <div className="container mx-auto">
       <h1 className="text-3xl font-bold mb-4">Product List</h1>
-      <table className="min-w-full divide-y divide-gray-200">
+      <div className="flex items-center space-x-2 mb-4">
+        <div className="relative">
+          <Select
+            options={categoryOptions}
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            className="w-40"
+          />
+          {selectedCategory && (
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className="absolute right-0 top-0 h-full flex items-center pr-2 text-gray-500 hover:text-gray-700"
+            >
+              <FaTimesCircle className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="border border-gray-300 rounded-md py-2 px-3 w-40 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {searchText && (
+            <button
+              onClick={() => setSearchText("")}
+              className="absolute right-0 top-0 h-full flex items-center pr-2 text-gray-500 hover:text-gray-700"
+            >
+              <FaTimesCircle className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+      </div>
+      <table className="min-w-full divide-y divide-gray-200 mt-10 p-5">
         <thead className="bg-gray-50">
           <tr>
             <th
@@ -74,18 +183,12 @@ const AllProduct = () => {
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
-              <span className="sr-only">Edit</span>
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              <span className="sr-only">Delete</span>
+              <span className="sr-only">Action</span>
             </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {currentProducts?.map((product) => (
+          {visibleProducts?.map((product: IProduct) => (
             <tr key={product._id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm font-medium text-gray-900">
@@ -108,18 +211,22 @@ const AllProduct = () => {
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-500">${product.store}</div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <td className="border px-4 py-2">
                 <button
-                  className="text-indigo-600 hover:text-indigo-900"
-                  // onClick={() => onEdit(product)}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                  onClick={() => handleProductClick(product)}
+                >
+                  View
+                </button>
+                <button
+                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2"
+                  onClick={() => handleUpdateClick(product)}
                 >
                   Edit
                 </button>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <button
-                  className="text-red-600 hover:text-red-900"
-                  // onClick={() => onDelete(product.id)}
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={() => handleDeleteClick(product)}
                 >
                   Delete
                 </button>
@@ -188,6 +295,29 @@ const AllProduct = () => {
           </li>
         </ul>
       </nav>
+      {/* modal */}
+
+      {/* {isSingleBrandModalOpen && (
+        <ViewProduct
+          onClose={() => setIsSingleBrandModalOpen(false)}
+          brand={selectedBrand}
+        />
+      )} */}
+
+      {slectedProduct && isUpdateProductModalOpen && (
+        <UpdateProduct
+          onClose={() => setIsUpdateProductModalOpen(false)}
+          onUpdateProduct={handleUpdateProduct}
+          product={slectedProduct}
+        />
+      )}
+      {slectedProduct && isDeleteProductModalOpen && (
+        <DeleteProduct
+          onClose={() => setIsDeleteProductModalOpen(false)}
+          onDeleteProduct={handleDeleteProduct}
+          product={slectedProduct}
+        />
+      )}
     </div>
   );
 };

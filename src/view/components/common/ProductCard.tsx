@@ -36,7 +36,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   return (
     <div className="flex flex-col bg-white shadow-md rounded-md">
       <img
-        className="w-full h-48 object-contain"
+        className="w-full h-48 object-contain rounded-t-md"
         src={product.image}
         alt={product.name}
       />
@@ -44,19 +44,15 @@ const ProductCard = ({ product }: { product: IProduct }) => {
         <div>
           <h2 className="text-lg font-semibold">{product.name}</h2>
           <p className="text-gray-600">${product.price}</p>
-          <p className="mt-2 text-sm text-gray-500">
-            {product.description.slice(0, 5)}
-          </p>
-          <p className="mt-2 text-sm text-gray-500">{product.store}</p>
           <p className="mt-2 text-sm text-gray-500">{product.category}</p>
         </div>
         <div className="flex items-center justify-center my-5">
           <button
             type="button"
-            className="p-1 border border-gray-300 rounded-l-md focus:outline-none"
+            className="p-2 border border-gray-300 rounded-l-md focus:outline-none"
             onClick={handleDecrement}
           >
-            <RiArrowDropDownLine />
+            <RiArrowDropDownLine className="text-gray-500" />
           </button>
           <input
             type="number"
@@ -70,10 +66,10 @@ const ProductCard = ({ product }: { product: IProduct }) => {
           />
           <button
             type="button"
-            className="p-1 border border-gray-300 rounded-r-md focus:outline-none"
+            className="p-2 border border-gray-300 rounded-r-md focus:outline-none"
             onClick={handleIncrement}
           >
-            <RiArrowDropUpLine />
+            <RiArrowDropUpLine className="text-gray-500" />
           </button>
         </div>
 

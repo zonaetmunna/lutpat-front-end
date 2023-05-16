@@ -3,23 +3,22 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import "swiper/swiper-bundle.css";
 import { IProduct } from "../../../../types";
+import { useGetProductsQuery } from "../../../../features/product/productApi";
 
 SwiperCore.use([Navigation, Pagination]);
 
-interface Props {
-  products?: IProduct[];
-}
-
-const Slider = ({ products = [] }: Props) => {
+const Slider = () => {
+  const { data, error, isError, isLoading } = useGetProductsQuery({});
+  const products = data?.data;
   return (
     <Swiper
       spaceBetween={30}
-      slidesPerView={3}
+      slidesPerView={5}
       navigation
       pagination={{ clickable: true }}
-      className=""
+      className="p-5 mb-5"
     >
-      {products.map((product) => (
+      {products?.map((product) => (
         <SwiperSlide key={product._id}>
           <div className="bg-white p-4 rounded-lg shadow-lg">
             <img
