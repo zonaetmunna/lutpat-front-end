@@ -1,7 +1,7 @@
 import React from "react";
 
 const UserRefunds = () => {
-  return <div></div>;
+  return <div>coming soon</div>;
 };
 
 export default UserRefunds;

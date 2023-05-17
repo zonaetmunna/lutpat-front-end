@@ -1,7 +1,7 @@
 import React from "react";
 
-const UserReports = () => {
+const CategoryList = () => {
   return <div>coming soon</div>;
 };
 
-export default UserReports;
+export default CategoryList;

@@ -1,7 +1,7 @@
 import React from "react";
 
 const UserOrders = () => {
-  return <div></div>;
+  return <div>coming soon</div>;
 };
 
 export default UserOrders;

@@ -16,8 +16,13 @@ import {
   FaPlus,
   FaUser,
 } from "react-icons/fa";
-import { BiMessageSquare } from "react-icons/bi";
-import { MdPeople, MdPerson, MdDashboard } from "react-icons/md";
+import { BiMessageSquare, BiStore } from "react-icons/bi";
+import {
+  MdPeople,
+  MdPerson,
+  MdDashboard,
+  MdRestaurantMenu,
+} from "react-icons/md";
 import { RootState } from "../../../../app/store";
 import { logOut } from "../../../../features/auth/authSlice";
 
@@ -73,7 +78,7 @@ const DashboardSidebar = () => {
       <nav className="flex flex-col py-4 ">
         {/* dashboard */}
         <button
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/admin-dashboard")}
           className="flex items-center py-2 px-4  hover:bg-gray-700 rounded-md"
         >
           <span className="mr-2">
@@ -87,7 +92,7 @@ const DashboardSidebar = () => {
           className="flex items-center py-2 px-4  hover:bg-gray-700 rounded-md"
         >
           <span className="mr-2">
-            <MdDashboard className="mr-4" />
+            <BiStore className="mr-4" />
           </span>
           <span className={`${isCollapsed ? "hidden" : ""}`}>Shop-List</span>
         </button>
@@ -132,6 +137,20 @@ const DashboardSidebar = () => {
             </span>
           </Link>
         </div>
+
+        {/* category */}
+        <button
+          onClick={() => navigate("category-list")}
+          className="flex items-center py-2 px-4  hover:bg-gray-700 rounded-md"
+        >
+          <span className="mr-2">
+            <MdRestaurantMenu className="mr-4" />
+          </span>
+          <span className={`${isCollapsed ? "hidden" : ""}`}>
+            Category-List
+          </span>
+        </button>
+
         {/* vendors */}
         <button
           className="flex items-center py-2 px-4 hover:bg-gray-700 rounded-md"
@@ -252,16 +271,6 @@ const DashboardSidebar = () => {
           </Link>
         </div>
 
-        {/* invoice */}
-        <button
-          onClick={() => navigate("invoice")}
-          className="flex items-center py-2 px-4  hover:bg-gray-700 rounded-md"
-        >
-          <span className="mr-2">
-            <FaFilePdf className="mr-4" />
-          </span>
-          <span className={`${isCollapsed ? "hidden" : ""}`}>Invoice</span>
-        </button>
         {/* setting */}
         <button
           onClick={() => navigate("settings")}

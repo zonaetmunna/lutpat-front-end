@@ -39,6 +39,11 @@ import UserQuestion from "../view/pages/main/userProfile/UserQuestion";
 import UserRefunds from "../view/pages/main/userProfile/UserRefunds";
 import UserReports from "../view/pages/main/userProfile/UserReports";
 import UserCards from "../view/pages/main/userProfile/UserCards";
+import SellerShopList from "../view/pages/sellerDashboard/sellerShopList/SellerShopList";
+import SellerRefunds from "../view/pages/sellerDashboard/sellerRefunds/SellerRefunds";
+import Shippings from "../view/pages/sellerDashboard/Shippings/Shippings";
+import SellerWithdrawals from "../view/pages/sellerDashboard/sellerWithdrawals/SellerWithdrawals";
+import CategoryList from "../view/pages/dashboard/category/CategoryList";
 const Main = React.lazy(() => import("../view/layout/Main"));
 const Home = React.lazy(() => import("../view/pages/main/home/Home"));
 const SingleProduct = React.lazy(
@@ -142,7 +147,7 @@ export const routes = createBrowserRouter([
         ),
         children: [
           {
-            path: "profile",
+            path: "my-profile",
             element: <UserProfileManage />,
           },
           {
@@ -212,6 +217,10 @@ export const routes = createBrowserRouter([
         path: "shop-list",
         element: <ShopList />,
       },
+      {
+        path: "category-list",
+        element: <CategoryList />,
+      },
       /* {
         path: "shop/:id",
         element: <SingleShop />,
@@ -240,10 +249,7 @@ export const routes = createBrowserRouter([
         path: "order/:id",
         element: <OrderDetails />,
       },
-      {
-        path: "invoice",
-        element: <Invoice />,
-      },
+
       {
         path: "message",
         element: <Message />,
@@ -265,8 +271,64 @@ export const routes = createBrowserRouter([
     errorElement: <Error />,
     children: [
       {
-        path: "/seller-dashboard",
+        path: "seller-dashboard",
         element: <SellerDashboardDefault />,
+      },
+      {
+        path: "seller-shop-list",
+        element: <SellerShopList />,
+      },
+      {
+        path: "product-list",
+        element: <AllProduct />,
+      },
+      {
+        path: "product-add",
+        element: <AddProduct />,
+      },
+      {
+        path: "category-list",
+        element: <CategoryList />,
+      },
+      {
+        path: "customer-list",
+        element: <CustomerList />,
+      },
+      {
+        path: "customer/:id",
+        element: <SingleCustomer />,
+      },
+      {
+        path: "order-list",
+        element: <OrderList />,
+      },
+      {
+        path: "order/:id",
+        element: <OrderDetails />,
+      },
+      {
+        path: "seller-refunds",
+        element: <SellerRefunds />,
+      },
+      {
+        path: "shippings",
+        element: <Shippings />,
+      },
+      {
+        path: "withdrawals",
+        element: <SellerWithdrawals />,
+      },
+      {
+        path: "invoice",
+        element: <Invoice />,
+      },
+      {
+        path: "message",
+        element: <Message />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
       },
     ],
   },
