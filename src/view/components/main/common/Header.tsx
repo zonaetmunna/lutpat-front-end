@@ -8,19 +8,20 @@ import { RootState } from "../../../../app/store";
 import { logOut } from "../../../../features/auth/authSlice";
 
 const Header = () => {
+  const [showLinks, setShowLinks] = useState(false);
+
+  // user from redux
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   console.log(user);
   console.log(user?._id);
 
-  const handleLogOut = () => {
-    dispatch(logOut());
-  };
-
-  const [showLinks, setShowLinks] = useState(false);
-
   const handleButtonClick = () => {
     setShowLinks(!showLinks); // Toggle the visibility of links
+  };
+
+  const handleLogOut = () => {
+    dispatch(logOut());
   };
 
   return (
@@ -70,8 +71,11 @@ const Header = () => {
             )}
 
             {user?.role === "user" && (
-              <div>
-                <button onClick={handleButtonClick} className="mx-2 relative">
+              <div className="relative">
+                <button
+                  onClick={handleButtonClick}
+                  className="mx-2 flex items-center text-gray-600 hover:text-gray-800 focus:outline-none"
+                >
                   <VscAccount size={20} />
                   {showLinks && (
                     <div className="absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg">

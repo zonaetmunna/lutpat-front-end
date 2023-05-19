@@ -67,6 +67,16 @@ export interface LoginData {
 }
 
 
+interface IAuthTotalData {
+  data: IAuthData[] | null;
+  isLoading: true | false,
+  isError: true | false,
+  error: string | null;
+  status: "idle" | "pending" | "success" | "error";
+};
+
+
+
 // ---------------store or shop--------------//
 export interface Store {
   _id: string;
