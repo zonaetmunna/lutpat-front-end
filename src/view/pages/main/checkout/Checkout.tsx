@@ -346,11 +346,11 @@ const Checkout = () => {
                   Credit/Debit Cards or Stripe
                 </label>
               </div>
-              {paymentMethod === "creditDebitCards" && (
+              {/*  {paymentMethod === "creditDebitCards" && (
                 <Elements stripe={stripePromise}>
                   <StripePayment />
                 </Elements> // Pass the handlePayment function to the StripePaymentForm component
-              )}
+              )} */}
             </div>
             <button
               type="submit"
@@ -361,6 +361,10 @@ const Checkout = () => {
           </div>
         </div>
       </form>
+
+      <Elements stripe={stripePromise}>
+        <StripePayment />
+      </Elements>
     </div>
   );
 };

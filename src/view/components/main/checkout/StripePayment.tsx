@@ -44,7 +44,6 @@ const StripePayment = () => {
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!stripe || !elements) {
       return;
     }
@@ -131,7 +130,11 @@ const StripePayment = () => {
           />
         </div>
         <button
-          className="btn btn-sm mt-4 btn-primary"
+          className={`text-sm mt-4 px-4 py-2 rounded bg-blue-500 text-white ${
+            !stripe || !clientSecret || processing
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-blue-700"
+          }`}
           type="submit"
           disabled={!stripe || !clientSecret || processing}
         >
