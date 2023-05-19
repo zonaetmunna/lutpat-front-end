@@ -1,15 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IAuthData, LoginData, SignUpData } from "../../types";
+import { IAuthData, LoginData, SignUpData, authInitState } from "../../types";
 import axios from "axios";
 
-
-interface authInitState {
-  user: IAuthData | null;
-  isLoading: true | false,
-  isError: true | false,
-  error: string | null;
-  status: "idle" | "pending" | "success" | "error";
-};
 
 const initialState: authInitState = {
   user: null,
@@ -41,6 +33,7 @@ export const loginUser = createAsyncThunk<IAuthData, LoginData>(
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/login`, LoginData);
       // const response = await httpReq.post('/auth/login', LoginData)
       console.log(response.data.data);
+      console.log(response.data);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

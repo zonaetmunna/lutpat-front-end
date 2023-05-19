@@ -44,6 +44,7 @@ import SellerRefunds from "../view/pages/sellerDashboard/sellerRefunds/SellerRef
 import Shippings from "../view/pages/sellerDashboard/Shippings/Shippings";
 import SellerWithdrawals from "../view/pages/sellerDashboard/sellerWithdrawals/SellerWithdrawals";
 import CategoryList from "../view/pages/dashboard/category/CategoryList";
+import Payment from "../view/pages/main/payment/Payment";
 const Main = React.lazy(() => import("../view/layout/Main"));
 const Home = React.lazy(() => import("../view/pages/main/home/Home"));
 const SingleProduct = React.lazy(
@@ -123,6 +124,14 @@ export const routes = createBrowserRouter([
         element: (
           <UserPrivateRoute>
             <Checkout />
+          </UserPrivateRoute>
+        ),
+      },
+      {
+        path: "payment",
+        element: (
+          <UserPrivateRoute>
+            <Payment />
           </UserPrivateRoute>
         ),
       },

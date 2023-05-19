@@ -1,5 +1,4 @@
-
-// product interface
+// --------------products--------------//
 interface IProduct {
   _id?: string;
   name: string;
@@ -12,13 +11,41 @@ interface IProduct {
   quantity?: number;
 };
 
+interface ApiResponseData {
+  data: IProduct[];
+  message: string;
+  error: boolean;
+}
+
+interface ApiResponseSingle {
+  data: IProduct;
+  message: string;
+  error: boolean;
+}
+
+interface GetProductsQueryParams {
+  category?: Category | string;
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+// ------------------account-------------//
+
+interface authInitState {
+  user: IAuthData | null;
+  isLoading: true | false,
+  isError: true | false,
+  error: string | null;
+  status: "idle" | "pending" | "success" | "error";
+};
 
 // auth login interface
 export interface IAuthData {
+  _id: string;
   name: string;
   email: string;
   phone: string;
-  _id: string;
   role: string;
   status: string;
   token: string;
@@ -40,7 +67,7 @@ export interface LoginData {
 }
 
 
-// store
+// ---------------store or shop--------------//
 export interface Store {
   _id: string;
   name: string;
@@ -73,7 +100,7 @@ export interface StoreDataForm {
 }
 
 
-// category
+// --------------category--------------//
 export interface Category {
   _id?: string;
   name: string;
@@ -94,37 +121,86 @@ export interface ResponseCategory {
   token: string | null;
 }
 
-// order
-interface IOrder {
-  userId: IAuthData._id;
-  products: IProduct._id[] | IProduct._id;
-  shippingInformation: OrderData;
-  totalAmount: Number;
-  status?: ["pending", "verified", "delivered", "rejected"];
-  createdAt?: Date;
+
+//-------------cart------------//
+
+interface ICartState {
+  cart: IProduct[];
+  shippingOption: string;
+  shippingCost: number;
+  discountCode: string;
+  subtotal: number;
+  total: number;
+  billingAddress: IBillingAddress
 }
 
+interface IBillingAddress {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  country?: string;
+  city?: string;
+  zip?: number;
+}
+
+
+// ----------wishlist-------//
+interface IWishlistState {
+  wishlist: IProduct[];
+}
+
+
+// ---------order-------------//
+
+/* interface IOrder {
+  userId?: IAuthData._id;
+  products?: IProduct._id[] | IProduct._id;
+  shippingInformation?: OrderData;
+  totalAmount?: Number;
+  status?: ["pending", "verified", "delivered", "rejected"];
+  createdAt?: Date;
+} */
+
 interface IOrderTotalData {
-  message: string;
-  error: boolean;
-  data: IOrder[];
+  message?: string;
+  error?: boolean;
+  data?: PaymentOrder[];
 }
 
 interface IOrderSingle {
-  message: string;
-  error: boolean;
-  data: IOrder;
+  message?: string;
+  error?: boolean;
+  data?: PaymentOrder;
 }
 
 
-interface OrderData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  country: string;
-  city: string;
-  zip: number;
-  paymentMethod: string;
+// -------------------
+interface OrderProduct {
+  productId: string;
+  quantity: number;
 }
+
+interface PaymentInfo {
+  method: string;
+  stripePayment: {
+    transactionId: string;
+    status: string;
+  };
+  bkashPayment?: {
+    transactionId: string;
+    status: string;
+  };
+}
+
+interface PaymentOrder {
+  _id?: string;
+  userId?: string;
+  products: OrderProduct[];
+  billingAddress: IBillingAddress;
+  status?: string;
+  totalAmount: number;
+  paymentInfo: PaymentInfo;
+}
+

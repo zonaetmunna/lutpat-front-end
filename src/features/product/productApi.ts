@@ -1,26 +1,5 @@
-import { Category, IProduct } from "../../types";
-import { ICategory } from "../../view/pages/main/home/Home";
+import { ApiResponseData, ApiResponseSingle, GetProductsQueryParams } from "../../types";
 import apiSlice from "../api/apiSlice";
-
-// types
-interface ApiResponseData {
-    data: IProduct[];
-    message: string;
-    error: boolean;
-}
-
-interface ApiResponseSingle {
-    data: IProduct;
-    message: string;
-    error: boolean;
-}
-
-interface GetProductsQueryParams {
-    category?: Category | string;
-    search?: string;
-    page?: number;
-    limit?: number;
-}
 
 const productApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({

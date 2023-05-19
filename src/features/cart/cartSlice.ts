@@ -1,27 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IProduct } from "../../types";
+import { IBillingAddress, ICartState, IProduct } from "../../types";
 import { RootState } from "../../app/store";
-
-
-/* interface CartProduct {
-    _id?: string;
-    name: string;
-    category: string;
-    description: string;
-    image: string;
-    price: number;
-    store: string;
-    quantity: number;
-} */
-
-interface ICartState {
-    cart: IProduct[];
-    shippingOption: string;
-    shippingCost: number;
-    discountCode: string;
-    subtotal: number;
-    total: number;
-}
 
 
 const initialState: ICartState = {
@@ -31,6 +10,7 @@ const initialState: ICartState = {
     discountCode: "",
     subtotal: 0,
     total: 0,
+    billingAddress: {}
 };
 
 export const cartSlice = createSlice({
@@ -126,6 +106,9 @@ export const cartSlice = createSlice({
                 state.total *= 0.9;
             }
         },
+        addToBillingAddress: (state, action: PayloadAction<IBillingAddress>) => {
+            state.billingAddress = action.payload;
+        },
     },
 });
 
@@ -138,6 +121,6 @@ export const { addToCart,
     setDiscountCode,
     setSubtotal,
     setTotal,
-    applyDiscountCode, } = cartSlice.actions;
+    applyDiscountCode, addToBillingAddress } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -6,13 +6,24 @@ import {
   usePostOrderMutation,
   usePostPaymentMutation,
 } from "../../../../features/order/orderApi";
+import { PaymentOrder } from "../../../../types";
 
-const StripePayment = () => {
+interface StripePaymentProps {
+  paymentMethod: string;
+}
+
+const StripePayment = ({
+  paymentMethod: paymentStripe,
+}: StripePaymentProps) => {
   const stripe = useStripe();
   const elements = useElements();
 
   const { user } = useSelector((state: RootState) => state.auth);
-  const { cart, total } = useSelector((state: RootState) => state.cart);
+  console.log(user?._id);
+  const { cart, total, billingAddress } = useSelector(
+    (state: RootState) => state.cart
+  );
+  console.log();
 
   const [cardError, setCardError] = useState("");
   const [success, setSuccess] = useState("");
@@ -24,7 +35,7 @@ const StripePayment = () => {
   // postPayment(total.toFixed(0)); */
   // const clientSecret = data.client_secret;
 
-  const [postOrder] = usePostOrderMutation();
+  const [postOrder, { isError, error, isSuccess }] = usePostOrderMutation();
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
@@ -88,19 +99,55 @@ const StripePayment = () => {
     if (paymentIntent.status === "succeeded") {
       console.log("card info", card);
       // store payment info in the database
-      const payment = {
+      const paymentOrder: PaymentOrder = {
+        userId: user?._id,
+        products: cart.map((c) => {
+          if (!c._id || !c.quantity) {
+            throw new Error("Invalid cart item");
+          }
+          return {
+            productId: c._id,
+            quantity: c.quantity,
+          };
+        }),
         totalAmount: total,
-        transactionId: paymentIntent.id,
-        user: user?._id,
-        products: cart,
+        paymentInfo: {
+          method: paymentStripe,
+          stripePayment: {
+            transactionId: paymentIntent.id,
+            status: success,
+          },
+          /* bkashPayment: {
+            transactionId: "",
+            status: "",
+          }, */
+        },
+        billingAddress,
       };
-      postOrder(payment);
+      postOrder(paymentOrder);
       setSuccess("Congrats! your payment completed");
       setTransactionId(paymentIntent.id);
     }
     setProcessing(false);
   };
 
+  /* order data making
+  
+  user._id
+  product._id
+  billingAddress
+  status
+  totalAmount
+  paymentInfo{
+    payment-method
+    paymentIntentId
+    status
+  }
+  */
+
+  if (isError) {
+    <p>database error</p>;
+  }
   return (
     <div>
       <form onSubmit={handlePayment}>
@@ -131,7 +178,7 @@ const StripePayment = () => {
         </div>
         <button
           className={`text-sm mt-4 px-4 py-2 rounded bg-blue-500 text-white ${
-            !stripe || !clientSecret || processing
+            !stripe || !clientSecret || processing || user?._id
               ? "opacity-50 cursor-not-allowed"
               : "hover:bg-blue-700"
           }`}

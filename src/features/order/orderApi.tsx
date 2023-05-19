@@ -19,6 +19,12 @@ const orderApi = apiSlice.injectEndpoints({
 
       providesTags: ["order"],
     }),
+    getOrderUser: builder.query<IOrderTotalData, string>({
+      query: (userId) => ({
+        url: `/order/user/${userId}`,
+      }),
+      providesTags: ["order"],
+    }),
 
     getOrder: builder.query<IOrderSingle, string>({
       query: (id) => ({
@@ -57,6 +63,7 @@ export const {
   usePostPaymentMutation,
   useGetOrderQuery,
   useGetOrdersQuery,
+  useGetOrderUserQuery,
   usePostOrderMutation,
   useDeleteOrderMutation,
   useUpdateOrderMutation,

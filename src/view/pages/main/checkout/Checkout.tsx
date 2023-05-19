@@ -1,27 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../app/store";
-import StripePayment from "../../../components/main/checkout/StripePayment";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../../app/store";
 import { usePostOrderMutation } from "../../../../features/order/orderApi";
-import { OrderData } from "../../../../types";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-
-const stripePromise = loadStripe(
-  "pk_test_51N94PxDWFXHG6ou173iNHT39bxat6wJIpxVrBtfSPv9xWUktk7f1UBZvcm6Pafy2In8hJlDK7TT5GIIRR7gw0Qra008NIHcADl"
-);
+import { IBillingAddress } from "../../../../types";
+import { Link } from "react-router-dom";
+import { addToBillingAddress } from "../../../../features/cart/cartSlice";
 
 const Checkout = () => {
   const { user } = useSelector((state: RootState) => state.auth);
-  const [postOrder] = usePostOrderMutation();
   const {
     handleSubmit,
     register,
     reset,
     control,
     formState: { errors },
-  } = useForm<OrderData>({
+  } = useForm<IBillingAddress>({
     defaultValues: {
       firstName: user?.name,
       email: user?.email,
@@ -29,12 +23,8 @@ const Checkout = () => {
     },
   });
 
+  const dispatch = useDispatch<AppDispatch>();
   const email = useWatch({ control, name: "email" });
-  const paymentMethod = useWatch({
-    control,
-    name: "paymentMethod",
-    defaultValue: "",
-  });
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
@@ -49,9 +39,7 @@ const Checkout = () => {
     (state: RootState) => state.cart
   );
 
-  const handlePayment = () => {};
-
-  const onSubmit = async (data: OrderData) => {
+  const onSubmit = async (data: IBillingAddress) => {
     const orderData = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -62,6 +50,7 @@ const Checkout = () => {
       city: data.city,
       zip: data.zip,
     };
+    dispatch(addToBillingAddress({ ...orderData }));
   };
 
   return (
@@ -72,18 +61,18 @@ const Checkout = () => {
       <div className="px-2 py-2">
         <hr />
       </div>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-white rounded px-8 pt-6 pb-8 mb-4"
-      >
-        <div className="flex justify-between px-5">
-          <div className="w-1/2 p-4 bg-gray-100 mx-5 shadow-lg">
-            <div className="border-b mb-6 pb-4 text-center">
-              <h2 className="text-lg leading-6 font-medium text-gray-900">
-                Billing Details
-              </h2>
-            </div>
 
+      <div className="flex justify-between px-5">
+        <div className="w-1/2 p-4 bg-gray-100 mx-5 shadow-lg">
+          <div className="border-b mb-6 pb-4 text-center">
+            <h2 className="text-lg leading-6 font-medium text-gray-900">
+              Billing Details
+            </h2>
+          </div>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="bg-white rounded px-8 pt-6 pb-8 mb-4"
+          >
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="mb-4">
@@ -285,86 +274,42 @@ const Checkout = () => {
                     )}
                   </div>
                 </div>
+                <button
+                  type="submit"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-4 hover:bg-indigo-500"
+                >
+                  Billing Address save
+                </button>
               </div>
             </div>
-          </div>
-          <div className="w-1/2 p-4 bg-gray-100 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
-            {cart.map((item) => (
-              <div
-                key={item._id}
-                className="flex justify-between items-center py-2"
-              >
-                <div className="font-semibold">{item.name}</div>
-                <div className="text-gray-600">${item.price.toFixed(2)}</div>
-                <div className="text-gray-600">x {item.quantity}</div>
-              </div>
-            ))}
-            <div className="border-t-2 border-gray-200 py-2">
-              <div className="flex justify-between items-center font-semibold">
-                <div>Total:</div>
-                <div>${total.toFixed(2)}</div>
-              </div>
-            </div>
-            <div className="mt-6">
-              <h3 className="font-medium mb-2">Payment Method</h3>
-              <div className="flex items-center mb-4">
-                <input
-                  type="radio"
-                  {...register("paymentMethod")}
-                  id="directBankTransfer"
-                  className="mr-2"
-                  value="directBankTransfer"
-                />
-                <label htmlFor="directBankTransfer" className="font-medium">
-                  Direct Bank Transfer
-                </label>
-              </div>
-              {/* Cash on Delivery radio button */}
-              <div className="flex items-center mb-4">
-                <input
-                  type="radio"
-                  {...register("paymentMethod")}
-                  id="cashOnDelivery"
-                  className="mr-2"
-                  value="cashOnDelivery"
-                />
-                <label htmlFor="cashOnDelivery" className="font-medium">
-                  Cash on Delivery
-                </label>
-              </div>
-              {/* Credit/Debit Cards or Stripe radio button */}
-              <div className="flex items-center mb-4">
-                <input
-                  type="radio"
-                  {...register("paymentMethod")}
-                  id="creditDebitCards"
-                  className="mr-2"
-                  value="creditDebitCards"
-                />
-                <label htmlFor="creditDebitCards" className="font-medium">
-                  Credit/Debit Cards or Stripe
-                </label>
-              </div>
-              {/*  {paymentMethod === "creditDebitCards" && (
-                <Elements stripe={stripePromise}>
-                  <StripePayment />
-                </Elements> // Pass the handlePayment function to the StripePaymentForm component
-              )} */}
-            </div>
-            <button
-              type="submit"
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-4 hover:bg-indigo-500"
-            >
-              Order
-            </button>
-          </div>
+          </form>
         </div>
-      </form>
-
-      <Elements stripe={stripePromise}>
-        <StripePayment />
-      </Elements>
+        <div className="w-1/2 p-4 bg-gray-100 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
+          {cart.map((item) => (
+            <div
+              key={item._id}
+              className="flex justify-between items-center py-2"
+            >
+              <div className="font-semibold">{item.name}</div>
+              <div className="text-gray-600">${item.price.toFixed(2)}</div>
+              <div className="text-gray-600">x {item.quantity}</div>
+            </div>
+          ))}
+          <div className="border-t-2 border-gray-200 py-2">
+            <div className="flex justify-between items-center font-semibold">
+              <div>Total:</div>
+              <div>${total.toFixed(2)}</div>
+            </div>
+          </div>
+          <Link
+            to="/payment"
+            className="bg-indigo-600 text-white px-4 py-2 mt-5 rounded-lg mt-4 hover:bg-indigo-500"
+          >
+            Go to Payment
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };

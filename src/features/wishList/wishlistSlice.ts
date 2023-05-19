@@ -1,11 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IProduct } from "../../types";
+import { IProduct, IWishlistState } from "../../types";
 
-
-
-interface IWishlistState {
-    wishlist: IProduct[];
-}
 
 const initialState: IWishlistState = {
     wishlist: [],

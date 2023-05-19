@@ -11,7 +11,7 @@ const Header = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   console.log(user);
-  console.log(user?.email);
+  console.log(user?._id);
 
   const handleLogOut = () => {
     dispatch(logOut());
