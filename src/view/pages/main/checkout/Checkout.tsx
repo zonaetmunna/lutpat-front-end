@@ -2,28 +2,39 @@ import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../app/store";
+import StripePayment from "../../../components/main/checkout/StripePayment";
+import { usePostOrderMutation } from "../../../../features/order/orderApi";
+import { OrderData } from "../../../../types";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
-interface OrderData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: number;
-  address: string;
-  country: string;
-  city: string;
-  zip: number;
-}
+const stripePromise = loadStripe(
+  "pk_test_51N94PxDWFXHG6ou173iNHT39bxat6wJIpxVrBtfSPv9xWUktk7f1UBZvcm6Pafy2In8hJlDK7TT5GIIRR7gw0Qra008NIHcADl"
+);
 
 const Checkout = () => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [postOrder] = usePostOrderMutation();
   const {
     handleSubmit,
     register,
     reset,
     control,
     formState: { errors },
-  } = useForm<OrderData>();
+  } = useForm<OrderData>({
+    defaultValues: {
+      firstName: user?.name,
+      email: user?.email,
+      phone: user?.phone,
+    },
+  });
 
   const email = useWatch({ control, name: "email" });
+  const paymentMethod = useWatch({
+    control,
+    name: "paymentMethod",
+    defaultValue: "",
+  });
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
@@ -38,9 +49,9 @@ const Checkout = () => {
     (state: RootState) => state.cart
   );
 
-  // const [addOrder] = useAddOrderMutation();
+  const handlePayment = () => {};
 
-  const onSubmit = (data: OrderData) => {
+  const onSubmit = async (data: OrderData) => {
     const orderData = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -51,12 +62,8 @@ const Checkout = () => {
       city: data.city,
       zip: data.zip,
     };
-
-    console.log(orderData);
-
-    // addOrder(orderData);
-    reset();
   };
+
   return (
     <div className="container mx-auto py-10 px-10">
       <div className="px-5 py-3">
@@ -65,17 +72,18 @@ const Checkout = () => {
       <div className="px-2 py-2">
         <hr />
       </div>
-      <div className="flex justify-between px-5">
-        <div className="w-1/2 p-4 bg-gray-100 mx-5 shadow-lg">
-          <div className="border-b mb-6 pb-4 text-center">
-            <h2 className="text-lg leading-6 font-medium text-gray-900">
-              Billing Details
-            </h2>
-          </div>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="bg-white rounded px-8 pt-6 pb-8 mb-4"
-          >
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-white rounded px-8 pt-6 pb-8 mb-4"
+      >
+        <div className="flex justify-between px-5">
+          <div className="w-1/2 p-4 bg-gray-100 mx-5 shadow-lg">
+            <div className="border-b mb-6 pb-4 text-center">
+              <h2 className="text-lg leading-6 font-medium text-gray-900">
+                Billing Details
+              </h2>
+            </div>
+
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="mb-4">
@@ -279,73 +287,80 @@ const Checkout = () => {
                 </div>
               </div>
             </div>
-          </form>
-        </div>
-        <div className="w-1/2 p-4 bg-gray-100 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
-          {cart.map((item) => (
-            <div
-              key={item._id}
-              className="flex justify-between items-center py-2"
+          </div>
+          <div className="w-1/2 p-4 bg-gray-100 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
+            {cart.map((item) => (
+              <div
+                key={item._id}
+                className="flex justify-between items-center py-2"
+              >
+                <div className="font-semibold">{item.name}</div>
+                <div className="text-gray-600">${item.price.toFixed(2)}</div>
+                <div className="text-gray-600">x {item.quantity}</div>
+              </div>
+            ))}
+            <div className="border-t-2 border-gray-200 py-2">
+              <div className="flex justify-between items-center font-semibold">
+                <div>Total:</div>
+                <div>${total.toFixed(2)}</div>
+              </div>
+            </div>
+            <div className="mt-6">
+              <h3 className="font-medium mb-2">Payment Method</h3>
+              <div className="flex items-center mb-4">
+                <input
+                  type="radio"
+                  {...register("paymentMethod")}
+                  id="directBankTransfer"
+                  className="mr-2"
+                  value="directBankTransfer"
+                />
+                <label htmlFor="directBankTransfer" className="font-medium">
+                  Direct Bank Transfer
+                </label>
+              </div>
+              {/* Cash on Delivery radio button */}
+              <div className="flex items-center mb-4">
+                <input
+                  type="radio"
+                  {...register("paymentMethod")}
+                  id="cashOnDelivery"
+                  className="mr-2"
+                  value="cashOnDelivery"
+                />
+                <label htmlFor="cashOnDelivery" className="font-medium">
+                  Cash on Delivery
+                </label>
+              </div>
+              {/* Credit/Debit Cards or Stripe radio button */}
+              <div className="flex items-center mb-4">
+                <input
+                  type="radio"
+                  {...register("paymentMethod")}
+                  id="creditDebitCards"
+                  className="mr-2"
+                  value="creditDebitCards"
+                />
+                <label htmlFor="creditDebitCards" className="font-medium">
+                  Credit/Debit Cards or Stripe
+                </label>
+              </div>
+              {paymentMethod === "creditDebitCards" && (
+                <Elements stripe={stripePromise}>
+                  <StripePayment />
+                </Elements> // Pass the handlePayment function to the StripePaymentForm component
+              )}
+            </div>
+            <button
+              type="submit"
+              className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-4 hover:bg-indigo-500"
             >
-              <div className="font-semibold">{item.name}</div>
-              <div className="text-gray-600">${item.price.toFixed(2)}</div>
-              <div className="text-gray-600">x {item.quantity}</div>
-            </div>
-          ))}
-          <div className="border-t-2 border-gray-200 py-2">
-            <div className="flex justify-between items-center font-semibold">
-              <div>Total:</div>
-              <div>${total.toFixed(2)}</div>
-            </div>
+              Order
+            </button>
           </div>
-          <div className="mt-6">
-            <h3 className="font-medium mb-2">Payment Method</h3>
-            <div className="flex items-center mb-4">
-              <input
-                type="radio"
-                name="paymentMethod"
-                id="directBankTransfer"
-                className="mr-2"
-              />
-              <label htmlFor="directBankTransfer" className="font-medium">
-                Direct Bank Transfer
-              </label>
-            </div>
-            <p>
-              Make your payment directly into our bank account. Please use your
-              Order ID as the payment reference.
-            </p>
-
-            <div className="flex items-center mb-4">
-              <input
-                type="radio"
-                name="paymentMethod"
-                id="cashOnDelivery"
-                className="mr-2"
-              />
-              <label htmlFor="cashOnDelivery" className="font-medium">
-                Cash on Delivery
-              </label>
-            </div>
-
-            <div className="flex items-center mb-4">
-              <input
-                type="radio"
-                name="paymentMethod"
-                id="creditDebitCards"
-                className="mr-2"
-              />
-              <label htmlFor="creditDebitCards" className="font-medium">
-                Credit/Debit Cards or Paypal
-              </label>
-            </div>
-          </div>
-          <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg mt-4 hover:bg-indigo-500">
-            Order
-          </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

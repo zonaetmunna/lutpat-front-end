@@ -17,7 +17,8 @@ interface IProduct {
 export interface IAuthData {
   name: string;
   email: string;
-  id: string;
+  phone: string;
+  _id: string;
   role: string;
   status: string;
   token: string;
@@ -91,4 +92,39 @@ export interface ResponseCategory {
   data: Category;
   message: string | null;
   token: string | null;
+}
+
+// order
+interface IOrder {
+  userId: IAuthData._id;
+  products: IProduct._id[] | IProduct._id;
+  shippingInformation: OrderData;
+  totalAmount: Number;
+  status?: ["pending", "verified", "delivered", "rejected"];
+  createdAt?: Date;
+}
+
+interface IOrderTotalData {
+  message: string;
+  error: boolean;
+  data: IOrder[];
+}
+
+interface IOrderSingle {
+  message: string;
+  error: boolean;
+  data: IOrder;
+}
+
+
+interface OrderData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address: string;
+  country: string;
+  city: string;
+  zip: number;
+  paymentMethod: string;
 }

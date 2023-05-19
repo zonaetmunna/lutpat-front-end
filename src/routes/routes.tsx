@@ -120,7 +120,11 @@ export const routes = createBrowserRouter([
       },
       {
         path: "Checkout",
-        element: <Checkout />,
+        element: (
+          <UserPrivateRoute>
+            <Checkout />
+          </UserPrivateRoute>
+        ),
       },
       {
         path: "Contact",
