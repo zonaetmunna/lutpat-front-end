@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { IAuthData } from "../types";
 import { LoginData } from "../types";
 
 // axios config

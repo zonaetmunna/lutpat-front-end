@@ -4,7 +4,6 @@ import { useGetProductsQuery } from "../../../../features/product/productApi";
 import Slider from "../../../components/main/home/Slider";
 import { Category, IProduct } from "../../../../types";
 import DeleveryOption from "../../../components/main/home/DeleveryOption";
-import { useGetCategoryQuery } from "../../../../features/category/categoryApi";
 import Select from "react-select";
 import {
   FaAngleDoubleLeft,
@@ -13,6 +12,7 @@ import {
   FaChevronRight,
   FaTimesCircle,
 } from "react-icons/fa";
+import { useGetCategoriesQuery } from "../../../../features/category/categoryApi";
 
 export interface ICategory {
   label: string;
@@ -49,7 +49,7 @@ const Home = () => {
     }
   }, [products, selectedCategory]);
 
-  const { data: categoryData } = useGetCategoryQuery();
+  const { data: categoryData } = useGetCategoriesQuery({});
   const categories = categoryData?.data;
   console.log(categories);
 

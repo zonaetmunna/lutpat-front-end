@@ -16,7 +16,7 @@ import {
   FaEdit,
 } from "react-icons/fa";
 import { ICategory } from "../../main/home/Home";
-import { useGetCategoryQuery } from "../../../../features/category/categoryApi";
+import { useGetCategoriesQuery } from "../../../../features/category/categoryApi";
 import UpdateProduct from "../../../components/dashboard/product/UpdateProduct";
 import DeleteProduct from "../../../components/dashboard/product/DeleteProduct";
 import ViewProduct from "../../../components/dashboard/product/ViewProduct";
@@ -52,7 +52,7 @@ const AllProduct = () => {
     }
   }, [products, selectedCategory]);
 
-  const { data: categoryData } = useGetCategoryQuery();
+  const { data: categoryData } = useGetCategoriesQuery({});
   const categories = categoryData?.data;
   console.log(categories);
 

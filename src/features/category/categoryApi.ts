@@ -1,12 +1,37 @@
-import { ResponseCategories, ResponseCategory } from "../../types";
+import { GetProductsQueryParams, ResponseCategories, ResponseCategory } from "../../types";
 import apiSlice from "../api/apiSlice";
 
 const categoryApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getCategory: builder.query<ResponseCategories, void>({
-            query: () => ({
-                url: "/category",
-            }),
+        getCategories: builder.query<ResponseCategories, GetProductsQueryParams>({
+            query: (params) => {
+                console.log(params);
+                const { category, search, page, limit, ...restParams } = params || {};
+                const query: GetProductsQueryParams = {};
+
+                if (category) {
+                    query.category = category;
+                }
+
+                if (search) {
+                    query.search = search;
+                }
+
+                if (page && limit) {
+                    query.page = page;
+                    query.limit = limit;
+                }
+
+                console.log(query);
+
+                return {
+                    url: "/category",
+                    params: {
+                        ...query,
+                        ...restParams,
+                    },
+                };
+            },
             providesTags: ["category"],
         }),
         getSingleCategory: builder.query<ResponseCategory, string>({
@@ -42,4 +67,4 @@ const categoryApi = apiSlice.injectEndpoints({
     }),
 })
 
-export const { useGetCategoryQuery, useGetSingleCategoryQuery, useAddCategoryMutation, useDeleteCategoryMutation, useUpdateCategoryMutation } = categoryApi;
+export const { useGetCategoriesQuery, useGetSingleCategoryQuery, useAddCategoryMutation, useDeleteCategoryMutation, useUpdateCategoryMutation } = categoryApi;

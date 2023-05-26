@@ -18,6 +18,8 @@ export const signupUser = createAsyncThunk<IAuthData, SignUpData>(
     try {
       // const response = await axios.post('/signup', userData);
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/signup`, SignUpData)
+      const token = response.data.data.token;
+      localStorage.setItem("token", token);
       console.log(response.data.data)
       return response.data.data;
 
@@ -32,6 +34,8 @@ export const loginUser = createAsyncThunk<IAuthData, LoginData>(
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/login`, LoginData);
       // const response = await httpReq.post('/auth/login', LoginData)
+      const token = response.data.data.token;
+      localStorage.setItem("token", token);
       console.log(response.data.data);
       console.log(response.data);
       return response.data.data;
