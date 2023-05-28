@@ -1,83 +1,73 @@
-import React, { useState, useRef, useEffect } from "react";
-import ChatMessage from "./ChatMessage";
+import axios from "axios";
+import React, { useState } from "react";
+const { Configuration, OpenAIApi } = require("openai");
 
-interface ChatMessage {
-  text: string;
-  isBot: boolean;
-}
-
+//
 const Chatbot = () => {
-  const [input, setInput] = useState<string>("");
-  const [chat, setChat] = useState<ChatMessage[]>([
-    {
-      text: "Hi, how can I help you today?",
-      isBot: true,
-    },
-  ]);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const [input, setInput] = useState("");
+  const [completedSentence, setCompletedSentence] = useState("");
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chat]);
+  const fetchData = async (input: string) => {
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/completions",
+        {
+          prompt: `Complete this sentence: "${input}"`,
+          model: "text-davinci-003",
+          max_tokens: 50,
+          n: 1,
+          stop: ".",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer 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",
+          },
+        }
+      );
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (input !== "") {
-      setChat([...chat, { text: input, isBot: false }]);
-      setInput("");
+      return response.data.choices[0].text;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Something went wrong");
     }
   };
 
-  const handleBotResponse = () => {
-    // Replace this with your bot's logic
-    const response = "I'm sorry, I didn't understand that.";
-    setChat([...chat, { text: response, isBot: true }]);
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    if (input !== "") {
-      setChat([...chat, { text: input, isBot: false }]);
-      setInput("");
+  const handleClick = async () => {
+    try {
+      const completedSentence = await fetchData(input);
+      setCompletedSentence(completedSentence);
+    } catch (error) {
+      console.error(error);
+      setCompletedSentence("Error: Failed to complete sentence");
     }
   };
 
   return (
-    <div className="w-full max-w-md mx-auto my-8">
-      <div className="bg-white rounded-lg shadow-lg p-4">
-        <div className="h-64 overflow-auto">
-          {chat.map((message, index) => (
-            <ChatMessage
-              key={index}
-              text={message.text}
-              isBot={message.isBot}
-            />
-          ))}
-          <div ref={chatEndRef} />
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="flex items-center border rounded-lg overflow-hidden">
-            <input
-              type="text"
-              placeholder="Type your message"
-              className="w-full px-4 py-2 text-gray-700 focus:outline-none"
-              value={input}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold focus:outline-none"
-            >
-              Send
-            </button>
-          </div>
-        </form>
-      </div>
+    <div className="container mx-auto py-8 w-1/3">
+      <h2>just learning purpose this section</h2>
+      <h2 className="text-2xl font-bold mb-4">
+        Tell me something, and I'll tell you more
+      </h2>
+      <textarea
+        value={input}
+        onChange={(event) => setInput(event.target.value)}
+        className="w-full h-32 p-2 mb-4 border border-gray-300 rounded"
+        placeholder="Type in some words and I'll finish the rest..."
+      />
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        onClick={handleClick}
+      >
+        Complete Sentence
+      </button>
+      {completedSentence && (
+        <p className="mt-4">
+          Completed sentence:{" "}
+          <span className="font-bold">{completedSentence}</span>
+        </p>
+      )}
     </div>
   );
 };

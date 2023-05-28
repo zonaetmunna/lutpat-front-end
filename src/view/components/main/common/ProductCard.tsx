@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IProduct } from "../../../../types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BiHeart, BiShoppingBag } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import { RiArrowDropUpLine, RiArrowDropDownLine } from "react-icons/ri";
-import { addToCart } from "../../../../features/cart/cartSlice";
+import { addToCart, updateQuantity } from "../../../../features/cart/cartSlice";
 import { addToWishlist } from "../../../../features/wishList/wishlistSlice";
-
+import { RootState } from "../../../../app/store";
+import { toast } from "react-hot-toast";
 const ProductCard = ({ product }: { product: IProduct }) => {
   // product destructuring
   console.log(product);
@@ -16,27 +17,48 @@ const ProductCard = ({ product }: { product: IProduct }) => {
 
   const [quantity, setQuantity] = useState(1);
 
+  const cart = useSelector((state: RootState) => state.cart.cart);
+
   const handleIncrement = () => {
-    setQuantity((prevQuantity) => Math.min(prevQuantity + 1, 10));
+    setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
   const handleDecrement = () => {
-    setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
+    if (quantity > 1) {
+      setQuantity((prevQuantity) => prevQuantity - 1);
+    }
   };
 
   const handleAddProductCart = (product: IProduct) => {
     console.log(product);
     dispatch(addToCart({ ...product, quantity }));
+    toast.success("Product added to cart", {
+      icon: "🛒",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
   };
+
   const handleAddToWishlist = (product: IProduct) => {
     console.log(product);
     dispatch(addToWishlist(product));
+    toast.success("Product added to wishlist", {
+      icon: "🛒",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
   };
 
   return (
     <div className="flex flex-col bg-white shadow-md rounded-md">
       <img
-        className="w-full h-48 object-contain rounded-t-md"
+        className="w-full h-48 object-contain rounded-t-md p-5"
         src={product.image}
         alt={product.name}
       />

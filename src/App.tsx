@@ -5,11 +5,12 @@ import "./App.css";
 import { routes } from "./routes/routes";
 import { store } from "./app/store";
 import { Toaster } from "react-hot-toast";
+import Loading from "./view/components/common/loading/Loading";
 
 function App() {
   return (
     <Provider store={store}>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading />}>
         <Toaster />
         <RouterProvider router={routes} />
       </Suspense>

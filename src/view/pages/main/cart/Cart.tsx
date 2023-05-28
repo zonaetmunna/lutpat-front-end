@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { IProduct } from "../../../../types";
 import ShippingOption from "../../../components/main/ShippingOption/ShippingOption";
+import { toast } from "react-hot-toast";
 
 const Cart = () => {
   const { cart, subtotal, discountCode, total, shippingOption, shippingCost } =
@@ -23,6 +24,14 @@ const Cart = () => {
   // remove product from cart
   const handleRemoveProductCart = (id: string) => {
     dispatch(removeFromCart(id));
+    toast.success("Product removed from cart", {
+      icon: "🛒",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
   };
 
   const handleUpdateQuantity = (id: string, quantity: number) => {
@@ -94,7 +103,6 @@ const Cart = () => {
                     />
                   </td>
                   <td className="py-4">
-                    $
                     {item &&
                       item.price &&
                       item.quantity &&

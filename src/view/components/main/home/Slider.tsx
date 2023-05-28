@@ -1,24 +1,26 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Navigation, Pagination } from "swiper";
+import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
 import "swiper/swiper-bundle.css";
 import { IProduct } from "../../../../types";
 import { useGetProductsQuery } from "../../../../features/product/productApi";
 
-SwiperCore.use([Navigation, Pagination]);
+SwiperCore.use([Navigation, Pagination, Autoplay]);
 
 const Slider = () => {
   const { data, error, isError, isLoading } = useGetProductsQuery({});
   const products = data?.data;
+
   return (
     <Swiper
       spaceBetween={30}
-      slidesPerView={5}
+      slidesPerView={2}
       navigation
       pagination={{ clickable: true }}
-      className="p-5 mb-5"
+      autoplay={{ delay: 3000 }} // Set the autoplay delay in milliseconds
+      className="p-10 mb-5"
     >
-      {products?.map((product) => (
+      {products?.map((product: IProduct) => (
         <SwiperSlide key={product._id}>
           <div className="bg-white p-4 rounded-lg shadow-lg">
             <img

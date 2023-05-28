@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import ProductCard from "../../../components/main/common/ProductCard";
 import { useGetProductsQuery } from "../../../../features/product/productApi";
 import Slider from "../../../components/main/home/Slider";
-import { Category, IProduct } from "../../../../types";
+import { Category } from "../../../../types";
 import DeleveryOption from "../../../components/main/home/DeleveryOption";
 import Select from "react-select";
 import {
@@ -13,6 +13,9 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 import { useGetCategoriesQuery } from "../../../../features/category/categoryApi";
+import Banner from "../../../components/main/home/Banner";
+import OfferBanner from "../../../components/main/common/OfferBanner";
+import Chatbot from "../../../components/common/Chatboat/Chatbot";
 
 export interface ICategory {
   label: string;
@@ -75,8 +78,13 @@ const Home = () => {
 
   return (
     <div className="container mx-auto bg-gray-100">
-      <div className="p-10">
-        <Slider />
+      <div className="flex flex-wrap justify-center p-10">
+        <div className="w-full md:w-1/2">
+          <Banner />
+        </div>
+        <div className="w-full md:w-1/2 p-5">
+          <Slider />
+        </div>
       </div>
 
       <div className="my-10">
@@ -84,50 +92,61 @@ const Home = () => {
       </div>
 
       <div className="bg-gray-100 mt-10">
-        <h1 className="text-center text-4xl font-bold mb-6">
-          Featured Products
-        </h1>
+        <h1 className="text-center text-4xl font-bold mb-6">Products</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {/* sidebar */}
-          <div className="space-y-4">
+          {/* Sidebar */}
+          <div className="space-y-4 bg-gray-200 rounded-lg shadow-lg p-4">
             <div className="relative">
-              <Select
-                options={categoryOptions}
-                value={selectedCategory}
-                onChange={handleCategoryChange}
-                className="w-40 px-4 py-2 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {selectedCategory && (
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className="absolute right-0 top-0 h-full flex items-center pr-2 text-gray-500 hover:text-gray-700"
-                >
-                  <FaTimesCircle className="w-4 h-4" />
-                </button>
-              )}
+              <div className="flex items-center">
+                <Select
+                  options={categoryOptions}
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
+                  className="w-40 px-4 py-2 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  styles={{
+                    control: (provided, state) => ({
+                      ...provided,
+                      backgroundColor: "white", // Modify the background color
+                    }),
+                  }}
+                />
+                {selectedCategory && (
+                  <button
+                    onClick={() => setSelectedCategory(null)}
+                    className="flex items-center ml-2 text-gray-500 hover:text-gray-700"
+                  >
+                    <FaTimesCircle className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
             </div>
             <div className="relative">
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                className="border border-gray-300 rounded-md py-2 px-4 w-40 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {searchText && (
-                <button
-                  onClick={() => setSearchText("")}
-                  className="absolute right-0 top-0 h-full flex items-center pr-2 text-gray-500 hover:text-gray-700"
-                >
-                  <FaTimesCircle className="w-4 h-4" />
-                </button>
-              )}
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  className="border border-gray-300 rounded-md py-2 px-4 w-40 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  style={{
+                    backgroundColor: "white", // Modify the background color
+                  }}
+                />
+                {searchText && (
+                  <button
+                    onClick={() => setSearchText("")}
+                    className="flex items-center ml-2 text-gray-500 hover:text-gray-700"
+                  >
+                    <FaTimesCircle className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
           {/* products */}
-          <div className="col-span-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          <div className="col-span-4 p-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
               {isLoading ? (
                 <p>Loading...</p>
               ) : isError ? (
@@ -159,7 +178,7 @@ const Home = () => {
                     disabled={currentPage === 1}
                     className={`${
                       currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-                    } ml-                3 py-2 px-4 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50`}
+                    } ml-3 py-2 px-4 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50`}
                   >
                     <span className="sr-only">Previous page</span>
                     <FaChevronLeft className="h-5 w-5" aria-hidden="true" />
@@ -206,6 +225,10 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <div className="p-10">
+        <OfferBanner />
+      </div>
+      <Chatbot />
     </div>
   );
 };

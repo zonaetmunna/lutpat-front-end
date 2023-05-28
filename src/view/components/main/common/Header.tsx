@@ -15,6 +15,8 @@ const Header = () => {
   const dispatch = useDispatch();
   console.log(user);
   console.log(user?._id);
+  const { cart } = useSelector((state: RootState) => state.cart);
+  const { wishlist } = useSelector((state: RootState) => state.wishlist);
 
   const handleButtonClick = () => {
     setShowLinks(!showLinks); // Toggle the visibility of links
@@ -52,11 +54,24 @@ const Header = () => {
           {/* User Actions */}
           <div className="flex justify-around items-center">
             <Link to="/wishlist" className="mx-2">
-              <BsHeart size={20} className="text-yellow-500" />
+              <div className="relative">
+                <BsHeart size={20} className="text-yellow-500" />
+                {wishlist.length > 0 && (
+                  <span className="absolute -top-1 -right-1 text-xs text-white bg-red-500 rounded-full w-4 h-4 flex items-center justify-center">
+                    {wishlist.length}
+                  </span>
+                )}
+              </div>
             </Link>
-
             <Link to="/cart" className="mx-2">
-              <BsCart3 size={20} className="text-yellow-500" />
+              <div className="relative">
+                <BsCart3 size={20} className="text-yellow-500" />
+                {cart.length > 0 && (
+                  <span className="absolute -top-1 -right-1 text-xs text-white bg-red-500 rounded-full w-4 h-4 flex items-center justify-center">
+                    {cart.length}
+                  </span>
+                )}
+              </div>
             </Link>
             {user?.role === "admin" && (
               <Link to="/admin-dashboard" className="mx-2">

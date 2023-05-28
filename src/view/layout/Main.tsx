@@ -11,9 +11,9 @@ const Main = () => {
       <div>
         <Outlet />
       </div>
-      <div>
+      {/* <div>
         <Chatbot />
-      </div>
+      </div> */}
       <Footer />
     </div>
   );

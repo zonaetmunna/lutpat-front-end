@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import emailjs from "emailjs-com";
+import { toast } from "react-hot-toast";
 
 type FormData = {
   name: string;
@@ -11,24 +13,49 @@ const Contact = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormData>();
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    // Submit form data to backend API
-    console.log(data);
+
+    try {
+      await emailjs.send(
+        "service_5rksu6c",
+        "template_tu8zs26",
+        {
+          name: data.name,
+          email: data.email,
+          message: data.message,
+        },
+        "aYOOXD_8uOMp0buQd"
+      );
+
+      // Display success toast
+      toast.success("Email sent successfully!");
+      reset();
+    } catch (error) {
+      console.error("Error sending email:", error);
+
+      // Display error toast
+      toast.error("Error sending email");
+    }
+
     setIsLoading(false);
   };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
         >
-          <h2 className="text-center text-2xl mb-4">Contact Us</h2>
+          <h2 className="text-center text-2xl mb-4 font-semibold text-gray-800">
+            Contact Us
+          </h2>
           <div className="mb-4">
             <label
               className="block text-gray-700 font-bold mb-2"
@@ -94,7 +121,7 @@ const Contact = () => {
               disabled={isLoading}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              Submit
+              {isLoading ? "Sending..." : "Submit"}
             </button>
           </div>
         </form>
