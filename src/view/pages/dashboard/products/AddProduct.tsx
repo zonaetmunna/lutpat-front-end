@@ -11,7 +11,7 @@ const AddProduct = () => {
   const { data: categoryData } = useGetCategoriesQuery({});
   const categories = categoryData?.data;
   const { data: storeData } = useGetStoreQuery({});
-  const stores = categoryData?.data;
+  const stores = storeData?.data;
   const {
     register,
     handleSubmit,
@@ -21,24 +21,38 @@ const AddProduct = () => {
 
   const onSubmit = async (data: IProduct) => {
     try {
-      const productData = {
-        name: data.name,
-        description: data.description,
-        image: data.image,
-        price: data.price,
-        category: data.category,
-        store: data.store,
-      };
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("description", data.description);
 
-      await addProduct(productData);
+      // Append single image to the FormData
+      if (data.image) {
+        formData.append("image", data.image[0]);
+      }
+
+      // Check if anotherImage is an array
+      if (Array.isArray(data.anotherImage)) {
+        data.anotherImage.forEach((image) => {
+          formData.append("anotherImage", image);
+        });
+      }
+
+      formData.append("price", data.price.toString());
+      formData.append("category", data.category);
+      formData.append("store", data.store);
+      console.log(formData);
+
+      await addProduct(formData);
 
       // Show success toast
+
       toast.success("Product added successfully");
 
       // Reset form
       reset();
     } catch (error) {
       // Show error toast
+      console.log(error);
       toast.error("Error adding product");
     }
   };
@@ -84,7 +98,7 @@ const AddProduct = () => {
                 Image
               </label>
               <input
-                type="text"
+                type="file"
                 id="image"
                 {...register("image", { required: true })}
                 className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-500"
@@ -92,6 +106,18 @@ const AddProduct = () => {
               {errors.image && (
                 <span className="text-red-500">Image is required</span>
               )}
+            </div>
+            <div>
+              <label htmlFor="anotherImage" className="text-lg font-semibold">
+                Another Image
+              </label>
+              <input
+                type="file"
+                id="anotherImage"
+                {...register("anotherImage")}
+                className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-500"
+                multiple // Enable multiple file selection
+              />
             </div>
             <div>
               <label htmlFor="price" className="text-lg font-semibold">

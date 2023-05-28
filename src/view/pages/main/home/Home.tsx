@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import ProductCard from "../../../components/main/common/ProductCard";
 import { useGetProductsQuery } from "../../../../features/product/productApi";
 import Slider from "../../../components/main/home/Slider";
@@ -16,6 +16,7 @@ import { useGetCategoriesQuery } from "../../../../features/category/categoryApi
 import Banner from "../../../components/main/home/Banner";
 import OfferBanner from "../../../components/main/common/OfferBanner";
 import Chatbot from "../../../components/common/Chatboat/Chatbot";
+import CartSidebar from "../../../components/main/cart/CartSidebar";
 
 export interface ICategory {
   label: string;
@@ -28,7 +29,7 @@ const Home = () => {
   );
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   // api data
   const { data, error, isError, isLoading } = useGetProductsQuery({
@@ -76,8 +77,40 @@ const Home = () => {
 
   const totalPages = Math.ceil(filteredProducts?.length / itemsPerPage);
 
+  // cartsiebar
+  const [isCartOpen, setCartOpen] = useState(false);
+
+  const handleCartOpen = () => {
+    setCartOpen(true);
+  };
+
+  const handleCartClose = () => {
+    setCartOpen(false);
+  };
+
+  const cartRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isCartOpen && cartRef.current) {
+      cartRef.current.focus();
+    }
+  }, [isCartOpen]);
+
   return (
-    <div className="container mx-auto bg-gray-100">
+    <div
+      className={`container mx-auto bg-gray-100 ${isCartOpen ? "blur" : ""}`}
+    >
+      <div className={`flex justify-end ${isCartOpen ? "" : "blur"}`}>
+        <div className="w-1/4">
+          <CartSidebar
+            isOpen={isCartOpen}
+            handleCartOpen={handleCartOpen}
+            onClose={handleCartClose}
+            ref={cartRef}
+          />
+        </div>
+      </div>
+
       <div className="flex flex-wrap justify-center p-10">
         <div className="w-full md:w-1/2">
           <Banner />
@@ -102,7 +135,7 @@ const Home = () => {
                   options={categoryOptions}
                   value={selectedCategory}
                   onChange={handleCategoryChange}
-                  className="w-40 px-4 py-2 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="border border-gray-300 rounded-md py-2 px-4 w-40 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   styles={{
                     control: (provided, state) => ({
                       ...provided,

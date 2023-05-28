@@ -14,6 +14,7 @@ const Main = () => {
       {/* <div>
         <Chatbot />
       </div> */}
+
       <Footer />
     </div>
   );

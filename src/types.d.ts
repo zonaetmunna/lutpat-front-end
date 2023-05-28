@@ -6,6 +6,7 @@ interface IProduct {
   category: string;
   description: string;
   image: string;
+  anotherImage: string[];
   price: number;
   store: string;
   createdAt?: string;
