@@ -17,7 +17,6 @@ import Invoice from "../view/pages/dashboard/invoice/Invoice";
 import Message from "../view/pages/dashboard/message/Message";
 import DashboardDefault from "../view/pages/dashboard/dashboardDefault/DashboardDefault";
 import ShopList from "../view/pages/dashboard/shop/ShopList";
-import SingleShop from "../view/pages/dashboard/shop/SingleShop";
 import Shop from "../view/pages/main/shop/Shop";
 import ShopDetails from "../view/pages/main/shop/ShopDetails";
 import SellerRegistration from "../view/pages/main/account/SellerRegistration";
@@ -234,10 +233,6 @@ export const routes = createBrowserRouter([
         path: "category-list",
         element: <CategoryList />,
       },
-      /* {
-        path: "shop/:id",
-        element: <SingleShop />,
-      }, */
       {
         path: "vendor-list",
         element: <VendorList />,

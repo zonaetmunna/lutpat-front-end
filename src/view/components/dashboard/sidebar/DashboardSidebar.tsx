@@ -11,7 +11,6 @@ import {
   FaChevronDown,
   FaChevronUp,
   FaCog,
-  FaFilePdf,
   FaList,
   FaPlus,
   FaUser,
@@ -26,14 +25,12 @@ import {
 import { RootState } from "../../../../app/store";
 import { logOut } from "../../../../features/auth/authSlice";
 
-const DashboardSidebar = () => {
+interface SidebarProps {
+  toggleSidebar: () => void;
+  isCollapsed: boolean;
+}
+const DashboardSidebar = ({ toggleSidebar, isCollapsed }: SidebarProps) => {
   const { user } = useSelector((state: RootState) => state.auth);
-
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
 
   const navigate = useNavigate();
 
@@ -67,14 +64,21 @@ const DashboardSidebar = () => {
   return (
     <div
       className={`${
-        isCollapsed ? " " : "w-56"
-      } h-screen p-5 rounded-lg shadow-md bg-gray-800 text-gray-100 flex flex-col transition-all duration-300 ease-in-out`}
+        isCollapsed ? "w-20" : "w-56"
+      } fixed top-0 left-0 bottom-0 h-screen p-5  shadow-md bg-gray-800 text-gray-100 flex flex-col transition-all duration-300 ease-in-out overflow-y-auto hide-scrollbar`}
     >
-      <div className="flex items-center justify-center h-16">
-        <div className="text-2xl font-semibold">Logo</div>
+      <div className="flex items-center justify-center h-16 rounded-full">
+        <img
+          src={user?.profileImage}
+          alt="Logo"
+          className="rounded-full w-20 h-20"
+        />
+      </div>
+      <div className="m-2 flex justify-center items-center">
+        <p>{user?.name}</p>
+        <p>{user?.role}</p>
       </div>
 
-      {/* {!user.email === "merchant" && ( */}
       <nav className="flex flex-col py-4 ">
         {/* dashboard */}
         <button
@@ -116,7 +120,7 @@ const DashboardSidebar = () => {
         <div className={`ml-4 ${isProductOpen ? "" : "hidden"}`}>
           <Link
             to="product-list"
-            className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-700 rounded-md transition-colors duration-200"
+            className="flex items-center py-2 px-4  hover:bg-gray-700 rounded-md transition-colors duration-200"
           >
             <span className="mr-2">
               <FaList className="mr-4" />
@@ -127,7 +131,7 @@ const DashboardSidebar = () => {
           </Link>
           <Link
             to="product-add"
-            className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
+            className="flex items-center py-2 px-4 hover:bg-gray-300 rounded-md"
           >
             <span className="mr-2">
               <FaPlus className="mr-4" />
@@ -171,7 +175,7 @@ const DashboardSidebar = () => {
         <div className={`ml-4 ${isVendorOpen ? "" : "hidden"}`}>
           <Link
             to="vendor-list"
-            className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
+            className="flex items-center py-2 px-4 hover:bg-gray-700 rounded-md"
           >
             <span className="mr-2">
               <FaUser className="mr-4" />
@@ -182,7 +186,7 @@ const DashboardSidebar = () => {
           </Link>
           <Link
             to="vendor/:id"
-            className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
+            className="flex items-center py-2 px-4 hover:bg-gray-700 rounded-md"
           >
             <span className="mr-2">
               <FaUser className="mr-4" />
@@ -212,7 +216,7 @@ const DashboardSidebar = () => {
         <div className={`ml-4 ${isCustomerOpen ? "" : "hidden"}`}>
           <Link
             to="customer-list"
-            className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
+            className="flex items-center py-2 px-4 hover:bg-gray-700 rounded-md"
           >
             <span className="mr-2">
               <MdPeople className="mr-4" />
@@ -223,7 +227,7 @@ const DashboardSidebar = () => {
           </Link>
           <Link
             to="customer/:id"
-            className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
+            className="flex items-center py-2 px-4  hover:bg-gray-700 rounded-md"
           >
             <span className="mr-2">
               <FaUser className="mr-4" />
@@ -251,7 +255,7 @@ const DashboardSidebar = () => {
         <div className={`ml-4 ${isOrderOpen ? "" : "hidden"}`}>
           <Link
             to="order-list"
-            className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
+            className="flex items-center py-2 px-4  hover:bg-gray-700 rounded-md"
           >
             <span className="mr-2">
               <FiShoppingBag />
@@ -260,7 +264,7 @@ const DashboardSidebar = () => {
           </Link>
           <Link
             to="/order/:id"
-            className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-300 rounded-md"
+            className="flex items-center py-2 px-4 hover:bg-gray-700 rounded-md"
           >
             <span className="mr-2">
               <FiShoppingBag />

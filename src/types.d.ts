@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 // --------------products--------------//
 interface IProduct {
   _id?: string;
@@ -48,6 +49,7 @@ export interface IAuthData {
   phone: string;
   role: string;
   status: string;
+  profileImage: string;
   token: string;
 }
 
@@ -59,7 +61,7 @@ export interface SignUpData {
   phone: string;
   role?: string;
   status?: string;
-  profileImage?: FileList;
+  profileImage?: image;
 }
 export interface LoginData {
   email: string;
@@ -76,17 +78,47 @@ interface IAuthTotalData {
 };
 
 
+/* -------------------seller-------------- */
+interface ISellerResponse {
+  error: boolean;
+  data: ISellerData[];
+  message: string;
+}
+
+interface ISellerData {
+  _id: string;
+  name: string;
+  lastName?: string;
+  email: string;
+  password: string;
+  phone: string;
+  role: string;
+  status: string;
+  profileImage: string;
+  __v: number;
+}
+
+interface ISellerQuery {
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
 
 // ---------------store or shop--------------//
 export interface Store {
-  _id: string;
+  _id?: string;
   name: string;
+  description: string;
   email: string;
+  phone: string;
   image: string;
+  website: string;
+  socialMedia: string;
   status: string;
   location: string;
-  owner: string;
-  __v: number;
+  owner?: string;
+  __v?: number;
 }
 
 export interface ResponseData {
@@ -101,12 +133,6 @@ export interface StoreResponse {
   data: Store;
   message: string | null;
   token: string | null;
-}
-
-export interface StoreDataForm {
-  name: string;
-  location: string;
-  status: string;
 }
 
 

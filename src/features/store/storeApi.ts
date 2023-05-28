@@ -1,12 +1,37 @@
-import { ResponseData, StoreResponse } from "../../types";
+import { GetProductsQueryParams, ResponseData, StoreResponse } from "../../types";
 import apiSlice from "../api/apiSlice";
 
 const storeApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getStore: builder.query<ResponseData, void>({
-            query: () => ({
-                url: "/store",
-            }),
+        getStore: builder.query<ResponseData, GetProductsQueryParams>({
+            query: (params) => {
+                console.log(params);
+                const { category, search, page, limit, ...restParams } = params || {};
+                const query: GetProductsQueryParams = {};
+
+                if (category) {
+                    query.category = category;
+                }
+
+                if (search) {
+                    query.search = search;
+                }
+
+                if (page && limit) {
+                    query.page = page;
+                    query.limit = limit;
+                }
+
+                console.log(query);
+
+                return {
+                    url: "/store",
+                    params: {
+                        ...query,
+                        ...restParams,
+                    },
+                };
+            },
             providesTags: ["store"],
         }),
         getSingleStore: builder.query<StoreResponse, string>({

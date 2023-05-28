@@ -10,7 +10,7 @@ const AddProduct = () => {
   const [addProduct, { error, isError, isLoading }] = useAddProductMutation();
   const { data: categoryData } = useGetCategoriesQuery({});
   const categories = categoryData?.data;
-  const { data: storeData } = useGetStoreQuery();
+  const { data: storeData } = useGetStoreQuery({});
   const stores = categoryData?.data;
   const {
     register,

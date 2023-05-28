@@ -28,12 +28,11 @@ const AllProduct = () => {
   );
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   // api data
   const { data, error, isError, isLoading } = useGetProductsQuery({
     category: selectedCategory?.value,
-
     search: searchText,
     page: currentPage,
     limit: itemsPerPage,
@@ -158,12 +157,7 @@ const AllProduct = () => {
             >
               Name
             </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Description
-            </th>
+
             <th
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -198,11 +192,7 @@ const AllProduct = () => {
                   {product.name}
                 </div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-500">
-                  {product.description.slice(0, 3)}
-                </div>
-              </td>
+
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-500">{product.category}</div>
               </td>
@@ -239,7 +229,7 @@ const AllProduct = () => {
         </tbody>
       </table>
       {/* paginition */}
-      <nav className="flex justify-center" aria-label="Pagination">
+      <nav className="flex justify-center m-10" aria-label="Pagination">
         <ul className="inline-flex">
           <li>
             <button

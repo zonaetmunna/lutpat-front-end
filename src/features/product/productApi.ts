@@ -1,4 +1,4 @@
-import { ApiResponseData, ApiResponseSingle, GetProductsQueryParams } from "../../types";
+import { ApiResponseData, ApiResponseSingle, GetProductsQueryParams, IProduct } from "../../types";
 import apiSlice from "../api/apiSlice";
 
 const productApi = apiSlice.injectEndpoints({
@@ -57,8 +57,8 @@ const productApi = apiSlice.injectEndpoints({
         }),
         updateProduct: builder.mutation({
             query: (product) => ({
-                url: `/product/${product._id}`,
-                method: "PUT",
+                url: `/products/${product._id}`,
+                method: "PATCH",
                 body: product,
             }),
             invalidatesTags: ["product"],

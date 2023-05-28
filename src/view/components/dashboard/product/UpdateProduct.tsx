@@ -19,11 +19,11 @@ const UpdateProduct = ({
     formState: { errors },
   } = useForm<IProduct>({
     defaultValues: {
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      image: product.image,
-      category: product.category,
+      name: product?.name || "",
+      description: product?.description || "",
+      price: product?.price || 0,
+      image: product?.image || "",
+      category: product?.category || "",
     },
   });
 
@@ -51,7 +51,7 @@ const UpdateProduct = ({
                 className="text-lg leading-6 font-medium text-gray-900"
                 id="modal-title"
               >
-                Edit Brand
+                Edit Product
               </h3>
               <div className="mt-4">
                 <div className="mb-4">
@@ -103,7 +103,7 @@ const UpdateProduct = ({
                     htmlFor="price"
                     className="block text-gray-700 font-bold mb-2"
                   >
-                    Name
+                    price
                   </label>
                   <input
                     type="number"
@@ -125,13 +125,11 @@ const UpdateProduct = ({
                     htmlFor="image"
                     className="block text-gray-700 font-bold mb-2"
                   >
-                    Name
+                    image
                   </label>
                   <input
-                    type="file"
-                    {...register("image", {
-                      required: "This field is required",
-                    })}
+                    type="text"
+                    {...register("image")}
                     className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                       errors.image ? "border-red-500" : ""
                     }`}
@@ -147,7 +145,7 @@ const UpdateProduct = ({
                     htmlFor="category"
                     className="block text-gray-700 font-bold mb-2"
                   >
-                    Name
+                    category
                   </label>
                   <input
                     type="text"

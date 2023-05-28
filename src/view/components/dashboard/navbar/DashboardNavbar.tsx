@@ -8,7 +8,13 @@ import { motion } from "framer-motion";
 import { RootState } from "../../../../app/store";
 import { logOut } from "../../../../features/auth/authSlice";
 
-const DashboardNavbar = () => {
+const DashboardNavbar = ({
+  toggleSidebar,
+  isCollapsed,
+}: {
+  toggleSidebar: () => void;
+  isCollapsed: boolean;
+}) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(
     localStorage.getItem("isDarkMode") === "true"
@@ -134,6 +140,23 @@ const DashboardNavbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
+            {/* toggle sidebar button */}
+            <button
+              className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-500 mr-4"
+              onClick={toggleSidebar}
+            >
+              <svg
+                className="w-6 h-6 fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                {isCollapsed ? (
+                  <path d="M9 5H4v14h5V5zm11 0H11v14h9V5z" />
+                ) : (
+                  <path d="M3 5h9v14H3V5zm10 0h9v14h-9V5z" />
+                )}
+              </svg>
+            </button>
             {/* dashboard logo */}
             <Link to="/" className="flex-shrink-0 flex items-center">
               <span className="font-semibold text-xl">Dashboard</span>

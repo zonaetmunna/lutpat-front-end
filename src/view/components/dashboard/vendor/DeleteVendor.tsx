@@ -1,16 +1,18 @@
 import React from "react";
-import { Store } from "../../../../types";
-
+import { ISellerData } from "../../../../types";
 interface DeleteModalProps {
   onClose: () => void;
-  onDeleteShop: (storeId: string) => void;
-  store: Store;
+  onDeleteSeller: (sellerId: string) => void;
+  seller: ISellerData;
 }
-
-const DeleteModal = ({ store, onDeleteShop, onClose }: DeleteModalProps) => {
+const DeleteVendor = ({
+  seller,
+  onDeleteSeller,
+  onClose,
+}: DeleteModalProps) => {
   const handleDelete = () => {
-    if (store && store._id) {
-      onDeleteShop(store._id);
+    if (seller && seller._id) {
+      onDeleteSeller(seller._id);
       onClose();
     }
   };
@@ -56,7 +58,7 @@ const DeleteModal = ({ store, onDeleteShop, onClose }: DeleteModalProps) => {
                 className="text-lg leading-6 font-medium text-gray-900"
                 id="modal-headline"
               >
-                Delete {store.name}?
+                Delete {seller.name}?
               </h3>
               <div className="mt-2">
                 <p className="text-sm text-gray-500">
@@ -88,4 +90,4 @@ const DeleteModal = ({ store, onDeleteShop, onClose }: DeleteModalProps) => {
   );
 };
 
-export default DeleteModal;
+export default DeleteVendor;

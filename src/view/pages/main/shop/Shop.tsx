@@ -4,7 +4,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { Link } from "react-router-dom";
 
 const Shop = () => {
-  const { data, isError, isLoading, error } = useGetStoreQuery();
+  const { data, isError, isLoading, error } = useGetStoreQuery({});
   const stores = data?.data;
   if (isLoading) {
     return <div>Loading...</div>;
