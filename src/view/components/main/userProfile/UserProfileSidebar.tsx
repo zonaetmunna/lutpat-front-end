@@ -24,11 +24,11 @@ const UserProfileSidebar = () => {
     return location.pathname === path ? "active" : "";
   };
   return (
-    <div className="relative h-screen bg-gradient-to-r from-yellow-400 w-64 p-5 rounded-lg shadow-md hover:bg-amber-200">
+    <div className="relative h-screen space-y-4 bg-gray-200  shadow-lg  w-64 p-5 rounded-lg hover:bg-amber-200">
       <div className="overflow-y-auto h-full">
         <ul className="flex gap-3 flex-col">
           <li className="font-bold text-lg text-center hover:text-sky-500 px-2">
-            user dashboard
+            My dashboard
           </li>
           <li
             className={`text-center font-normal text-gray-900 rounded-lg hover:bg-gray-100 ${isActiveLink(
