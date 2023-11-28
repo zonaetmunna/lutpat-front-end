@@ -1,12 +1,12 @@
-import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
-import { Link } from "react-router-dom";
-import { FiMaximize, FiMinimize, FiMoon, FiSun } from "react-icons/fi";
-import { FaUserCircle, FaBell, FaEnvelope } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { BiMessageSquare } from "react-icons/bi";
 import { motion } from "framer-motion";
-import { logOut } from "../../../../features/auth/authSlice";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { BiMessageSquare } from "react-icons/bi";
+import { FaBell, FaUserCircle } from "react-icons/fa";
+import { FiMaximize, FiMinimize, FiMoon, FiSun } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { RootState } from "../../../../app/store";
+import { logOut } from "../../../../features/auth/authSlice";
 
 const NavbarSeller = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -138,8 +138,15 @@ const NavbarSeller = () => {
               <span className="font-semibold text-xl">Go to Home </span>
             </Link>
           </div>
+
           {/*  */}
           <div className="flex justify-around items-center">
+            {/* create-store */}
+            <div className="flex">
+              <Link to="/create-store" className="flex-shrink-0 flex items-center">
+                <span className="font-semibold text-xl">Create store</span>
+              </Link>
+            </div>
             {/* dark mode */}
             <div>
               <button className="mr-2" onClick={handleModeToggle}>

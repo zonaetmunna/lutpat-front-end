@@ -1,23 +1,21 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
-import Header from "../components/main/common/Header";
-import Footer from "../components/main/common/Footer";
-import Chatbot from "../components/common/Chatboat/Chatbot";
+import { Outlet } from 'react-router-dom';
+import Footer from '../components/templates/Footer';
+import Header from '../components/templates/Header';
 
 const Main = () => {
-  return (
-    <div>
-      <Header />
-      <div>
-        <Outlet />
-      </div>
-      {/* <div>
+	return (
+		<div>
+			<Header />
+			<div>
+				<Outlet />
+			</div>
+			{/* <div>
         <Chatbot />
       </div> */}
 
-      <Footer />
-    </div>
-  );
+			<Footer />
+		</div>
+	);
 };
 
 export default Main;

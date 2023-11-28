@@ -1,6 +1,5 @@
-import React from "react";
-import { useGetUsersQuery } from "../../../../features/auth/authApi";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { useGetUsersQuery } from "../../../../features/auth/authApi";
 
 const CustomerList = () => {
   const { data, error, isError } = useGetUsersQuery();

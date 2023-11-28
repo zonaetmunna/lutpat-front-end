@@ -1,7 +1,6 @@
-import React from "react";
-import { useGetStoreQuery } from "../../../../features/store/storeApi";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { Link } from "react-router-dom";
+import { useGetStoreQuery } from "../../../../features/store/storeApi";
 
 const Shop = () => {
   const { data, isError, isLoading, error } = useGetStoreQuery({});

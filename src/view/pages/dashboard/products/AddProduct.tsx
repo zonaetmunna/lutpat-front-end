@@ -1,10 +1,9 @@
-import React from "react";
-import { useAddProductMutation } from "../../../../features/product/productApi";
-import { useGetStoreQuery } from "../../../../features/store/storeApi";
 import { useForm } from "react-hook-form";
-import { IProduct } from "../../../../types";
 import toast from "react-hot-toast";
 import { useGetCategoriesQuery } from "../../../../features/category/categoryApi";
+import { useAddProductMutation } from "../../../../features/product/productApi";
+import { useGetStoreQuery } from "../../../../features/store/storeApi";
+import { IProduct } from "../../../../types";
 
 const AddProduct = () => {
   const [addProduct, { error, isError, isLoading }] = useAddProductMutation();
@@ -57,7 +56,7 @@ const AddProduct = () => {
     }
   };
   return (
-    <div className="bg-gray-200 min-h-screen">
+    <div className=" h-screen">
       <div className="container mx-auto py-10">
         <h1 className="text-3xl font-semibold mb-8">Add Product</h1>
         <div className="bg-white rounded-lg shadow-md p-6">

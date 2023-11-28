@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 // --------------products--------------//
 interface IProduct {
   _id?: string;

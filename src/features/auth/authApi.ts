@@ -11,6 +11,14 @@ const authApi = apiSlice.injectEndpoints({
             }),
             providesTags: ["auth"],
         }),
+        createSeller: builder.mutation({
+            query: (data) => ({
+              url: "/auth/seller",
+              method: "POST",
+              body: data,
+            }),
+            invalidatesTags: ["auth"],
+          }),
         getAllSeller: builder.query<ISellerResponse, ISellerQuery>({
             query: (params) => {
                 console.log(params);
@@ -58,4 +66,4 @@ const authApi = apiSlice.injectEndpoints({
     })
 })
 
-export const { useGetUsersQuery, useGetAllSellerQuery, useDeleteSellerMutation, useUpdateSellerMutation } = authApi;
+export const { useGetUsersQuery,useCreateSellerMutation, useGetAllSellerQuery, useDeleteSellerMutation, useUpdateSellerMutation } = authApi;

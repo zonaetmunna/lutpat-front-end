@@ -1,11 +1,8 @@
-import React from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { loginUser } from "../../../../features/auth/authSlice";
-import { Dispatch } from "@reduxjs/toolkit";
-import { signupUser } from "../../../../features/auth/authSlice";
-import { AppDispatch } from "../../../../app/store";
+import { toast } from "react-hot-toast";
 import image from "../../../../assets/images/seller-registration-image.avif";
+import { useCreateSellerMutation } from "../../../../features/auth/authApi";
 
 type FormData = {
   name: string;
@@ -13,22 +10,50 @@ type FormData = {
   password: string;
   phone: string;
   role: string;
-  status: string;
-  profileImage: FileList;
+  profileImage?: string;
 };
 
 const SellerRegistration = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormData>();
-  const dispatch = useDispatch<AppDispatch>();
+  const [createSeller,{isError,isLoading,error,isSuccess}]=useCreateSellerMutation();
 
   const onSubmit = async (data: FormData) => {
-    console.log(data);
-    dispatch(signupUser(data));
+    const sellerPostData={
+      name:data.name,
+      email:data.email,
+      password:data.password,
+      phone:data.phone,
+      role:"seller"
+    }
+    try {
+      console.log(sellerPostData);
+    createSeller(sellerPostData);
+    toast.success("Sign up successful!");
+    reset();
+    } catch (error) {
+      toast.error("Sign up failed. Please try again.");
+      
+    }
+     
   };
+
+  useEffect(() => {
+    if (isError) {
+      toast.error("error");
+    }
+  }, [isError, error]);
+  useEffect(() => {
+    if (isSuccess) {
+      toast.error("successfully");
+    }
+  }, [isSuccess]);
+
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -146,30 +171,7 @@ const SellerRegistration = () => {
                 <p className="text-red-500 text-xs italic">Role is required</p>
               )}
             </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 font-bold mb-2"
-                htmlFor="status"
-              >
-                Status
-              </label>
-              <select
-                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                  errors.status && "border-red-500"
-                }`}
-                id="status"
-                {...register("status", { required: true })}
-              >
-                <option value="">Select a status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-              {errors.status && (
-                <p className="text-red-500 text-xs italic">
-                  Status is required
-                </p>
-              )}
-            </div>
+            
             <div className="mb-4">
               <label
                 className="block text-gray-700 font-bold mb-2"
@@ -178,10 +180,10 @@ const SellerRegistration = () => {
                 Profile Image
               </label>
               <input
-                type="file"
+                type="text"
                 accept="image/*"
                 id="profileImage"
-                {...register("profileImage", { required: true })}
+                {...register("profileImage")}
               />
               {errors.profileImage && (
                 <p className="text-red-500 text-xs italic">
@@ -192,9 +194,12 @@ const SellerRegistration = () => {
             <div className="mb-4">
               <button
                 type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
+                  isSuccess ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={isSuccess}
               >
-                Register
+                {isSuccess ? "Registered" : "Register"}
               </button>
             </div>
           </form>
